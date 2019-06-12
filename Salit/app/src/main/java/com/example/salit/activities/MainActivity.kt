@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.example.salit.R
 import com.example.salit.fragments.CreateSaleFragment
 import com.example.salit.fragments.HomeFragment
+import com.example.salit.fragments.SearchSaleFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -70,12 +71,21 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.createSale -> {
                     val createSaleFragment = supportFragmentManager.findFragmentByTag("createSaleFrag")
-                    if(createSaleFragment != null) {
+                    if (createSaleFragment != null) {
                         transaction.replace(R.id.contentFrameLayout, createSaleFragment)
-                    } else{
+                    } else {
                         transaction.replace(R.id.contentFrameLayout, CreateSaleFragment(), "createSaleFrag")
                     }
                     supportActionBar!!.title = "Create Sale"
+                }
+
+                R.id.searchSale -> {
+                    val searchSaleFragment = supportFragmentManager.findFragmentByTag("searchSaleFrag")
+                    if (searchSaleFragment != null) {
+                        transaction.replace(R.id.contentFrameLayout, searchSaleFragment)
+                    } else {
+                        transaction.replace(R.id.contentFrameLayout, SearchSaleFragment(), "searchSaleFrag")
+                    }
                 }
             }
 

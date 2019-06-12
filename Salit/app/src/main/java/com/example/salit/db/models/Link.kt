@@ -10,14 +10,14 @@ import android.support.annotation.NonNull
     tableName = "Link", foreignKeys = [ForeignKey(
         entity = Sale::class,
         parentColumns = arrayOf("id"),
-        childColumns = arrayOf("sale_id"),
+        childColumns = arrayOf("saleId"),
         onDelete = ForeignKey.CASCADE
     )]
 )
 
 data class Link(
     @NonNull @ColumnInfo(name = "link") val link: String?,
-    @NonNull @ColumnInfo(name = "sale_id") val sale_id: Int
+    @NonNull @ColumnInfo(name = "saleId") val saleId: Int
 ){
     @PrimaryKey(autoGenerate=true) var id: Int = 0
 }

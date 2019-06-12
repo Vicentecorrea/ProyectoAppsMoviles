@@ -18,7 +18,7 @@ import android.support.annotation.NonNull
     exportSchema = false
 )
 public abstract class AppDatabase : RoomDatabase(){
-    abstract fun SaleDao(): SaleDao
+    abstract fun saleDao(): SaleDao
 
     companion object{
         @Volatile
