@@ -15,7 +15,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        startHomeView()
         setToolbar()
+    }
+
+    private fun startHomeView() {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        val fragment = HomeFragment()
+        fragmentTransaction.add(R.id.contentFrameLayout, fragment)
+        fragmentTransaction.commit()
     }
 
     private fun setToolbar() {
@@ -58,21 +66,6 @@ class MainActivity : AppCompatActivity() {
                     }
                     supportActionBar!!.title = getString(R.string.action_bar_home_title)
                 }
-
-//                R.id.makeComplain -> {
-//                    val makeComplaintFragment = supportFragmentManager.findFragmentByTag("createComplaintFrag")
-//                    if (makeComplaintFragment != null) {
-//                        transaction.replace(R.id.contentFrameLayout, makeComplaintFragment)
-//                    } else {
-//                        transaction.replace(R.id.contentFrameLayout, MakeComplaintFragment(), "createComplaintFrag")
-//                    }
-//                    supportActionBar!!.title = getString(R.string.action_bar_make_complaint_title)
-//                }
-
-
-//                R.id.signOut -> {
-//                    onSignOut()
-//                }
             }
 
             transaction.commit()
