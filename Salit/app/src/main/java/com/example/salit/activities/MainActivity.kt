@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         transaction.replace(R.id.contentFrameLayout, SearchSaleFragment(), "searchSaleFrag")
                     }
+                    supportActionBar!!.title = "Search"
                 }
             }
 
