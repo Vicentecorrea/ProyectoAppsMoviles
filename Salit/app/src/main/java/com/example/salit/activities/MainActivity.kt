@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import com.example.salit.R
+import com.example.salit.fragments.CreateSaleFragment
 import com.example.salit.fragments.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -65,6 +66,16 @@ class MainActivity : AppCompatActivity() {
                         transaction.replace(R.id.contentFrameLayout, HomeFragment(), "homeFrag")
                     }
                     supportActionBar!!.title = getString(R.string.action_bar_home_title)
+                }
+
+                R.id.createSale -> {
+                    val createSaleFragment = supportFragmentManager.findFragmentByTag("createSaleFrag")
+                    if(createSaleFragment != null) {
+                        transaction.replace(R.id.contentFrameLayout, createSaleFragment)
+                    } else{
+                        transaction.replace(R.id.contentFrameLayout, CreateSaleFragment(), "createSaleFrag")
+                    }
+                    supportActionBar!!.title = "Create Sale"
                 }
             }
 

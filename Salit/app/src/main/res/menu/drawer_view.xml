@@ -5,5 +5,9 @@
             android:id="@+id/home"
             android:icon="@drawable/ic_launcher_background"
             android:title="@string/navigation_drawer_home_title" />
+    <item
+        android:id="@+id/createSale"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="Create Sale" />
     </group>
 </menu>
