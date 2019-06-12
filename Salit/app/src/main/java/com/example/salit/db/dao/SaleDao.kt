@@ -14,10 +14,10 @@ interface SaleDao {
     fun insertAll(vararg sale: Sale)
 
     @Query("SELECT * FROM sales ORDER BY salePrice DESC")
-    fun getSalesOrderedByPriceDesc()
+    fun getSalesOrderedByPriceDesc(): List<Sale>
 
     @Query("SELECT * FROM sales ORDER BY salePrice DESC")
-    fun getSalesOrderedByPriceAsc()
+    fun getSalesOrderedByPriceAsc(): List<Sale>
 
     @Query("SELECT * FROM sales WHERE category LIKE :categoryName")
     fun getSalesByCategory(categoryName: String): List<Sale>
@@ -26,6 +26,6 @@ interface SaleDao {
     fun getSalesByName(saleName: String): List<Sale>
 
     @Query("SELECT * FROM sales WHERE salePrice < :targetPrice ORDER BY salePrice ASC")
-    fun getSalesByPriceTarget(targetPrice: Int)
+    fun getSalesByPriceTarget(targetPrice: Int): List<Sale>
     
 }

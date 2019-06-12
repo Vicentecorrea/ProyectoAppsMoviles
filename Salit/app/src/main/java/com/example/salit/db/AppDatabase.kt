@@ -11,25 +11,24 @@ import java.util.concurrent.Executors
 import android.support.annotation.NonNull
 
 
-
 @Database(
     entities = [Image::class, Link::class, Location::class, Sale::class],
     version = 1,
     exportSchema = false
 )
-public abstract class AppDatabase : RoomDatabase(){
-    abstract fun saleDao(): SaleDao
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun SaleDao(): SaleDao
 
-    companion object{
+    companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase{
+        fun getDatabase(context: Context): AppDatabase {
             val tempInstance = INSTANCE
-            if (tempInstance != null){
+            if (tempInstance != null) {
                 return tempInstance
             }
-            synchronized(this){
+            synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,

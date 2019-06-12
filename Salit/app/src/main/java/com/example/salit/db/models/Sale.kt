@@ -17,8 +17,7 @@ data class Sale(
     @NonNull @ColumnInfo(name = "originalPrice") val originalPrice: Int,
     @NonNull @ColumnInfo(name = "salePrice") val salePrice: Int,
     @NonNull @ColumnInfo(name = "isOnline") val isOnline: Boolean,
-    @NonNull @ColumnInfo(name = "createdAt") val createdAt: Date
+    @NonNull @ColumnInfo(name = "createdAt") val createdAt: String
 ) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    @PrimaryKey(autoGenerate = true) var id: Int = 0
 }

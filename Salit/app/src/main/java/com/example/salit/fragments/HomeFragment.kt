@@ -28,7 +28,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadSales(){
-        val saleDao = AppDatabase.getDatabase(context!!).saleDao()
+        val database = AppDatabase.getDatabase(context!!)
+        val saleDao = database.SaleDao()
         GlobalScope.launch(Dispatchers.IO){
             val sales = saleDao.getAll()
             launch(Dispatchers.Main){
