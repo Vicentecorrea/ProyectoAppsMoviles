@@ -1,0 +1,28 @@
+Tablas proyecto Apps Móviles:
+
+1. Oferta
+	- id
+	- nombre producto
+	- descripción
+	- precio normal
+	- precio oferta
+	- id categoría
+	- is_online
+
+2. Categoría
+	- id
+	- nombre
+
+3. Ubicación
+	- id
+	- latitud
+	- longitud
+	- id oferta
+
+4. Imagen
+	- uri
+	- id oferta
+
+5. Link
+	- id
+	- text

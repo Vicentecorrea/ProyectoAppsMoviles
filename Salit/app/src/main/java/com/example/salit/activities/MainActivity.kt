@@ -1,7 +1,8 @@
-package com.example.salit
+package com.example.salit.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.salit.R
 
 class MainActivity : AppCompatActivity() {
 
