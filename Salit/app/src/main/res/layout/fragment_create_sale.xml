@@ -1,14 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fragments.CreateSaleFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+<android.support.constraint.ConstraintLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"/>
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            tools:context=".fragments.CreateSaleFragment">
 
-</FrameLayout>
+    <EditText
+            android:id="@+id/saleNameEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/saleDescriptionEditText"/>
+
+    <EditText
+            android:id="@+id/saleDescriptionEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/saleNameEditText"
+            app:layout_constraintBottom_toTopOf="@+id/normalPriceInput"/>
+
+
+    <EditText
+            android:id="@+id/normalPriceInput"
+            android:inputType="numberSigned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/offerPriceInput"
+            app:layout_constraintTop_toBottomOf="@+id/saleDescriptionEditText"
+            app:layout_constraintBottom_toTopOf="@+id/spinnerCategories">
+    </EditText>
+
+    <EditText
+            android:id="@+id/offerPriceInput"
+            android:inputType="numberSigned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/normalPriceInput"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/saleDescriptionEditText"
+            app:layout_constraintBottom_toTopOf="@+id/spinnerCategories">
+    </EditText>
+
+    <Spinner
+            android:id="@+id/spinnerCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/normalPriceInput"
+            app:layout_constraintBottom_toBottomOf="parent">
+    </Spinner>
+
+    <!--<CheckBox-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
+
+
+</android.support.constraint.ConstraintLayout>
