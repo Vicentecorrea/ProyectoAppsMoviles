@@ -10,7 +10,7 @@ import android.support.annotation.NonNull
     tableName = "Location", foreignKeys = [ForeignKey(
         entity = Sale::class,
         parentColumns = arrayOf("id"),
-        childColumns = arrayOf("sale_id"),
+        childColumns = arrayOf("saleId"),
         onDelete = ForeignKey.CASCADE
     )]
 )
@@ -18,7 +18,7 @@ import android.support.annotation.NonNull
 data class Location(
     @NonNull @ColumnInfo(name = "longitude") val longitude: Double,
     @NonNull @ColumnInfo(name = "latitude") val latitude: Double,
-    @NonNull @ColumnInfo(name = "sale_id") val sale_id: Int
+    @NonNull @ColumnInfo(name = "saleId") val saleId: Int
 ){
     @PrimaryKey(autoGenerate=true) var id: Int = 0
 }

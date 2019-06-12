@@ -11,14 +11,14 @@ import android.support.annotation.NonNull
     tableName = "Image", foreignKeys = [ForeignKey(
         entity = Sale::class,
         parentColumns = arrayOf("id"),
-        childColumns = arrayOf("sale_id"),
+        childColumns = arrayOf("saleId"),
         onDelete = CASCADE
     )]
 )
 
 data class Image(
     @NonNull @ColumnInfo(name = "uri") val uri: String?,
-    @NonNull @ColumnInfo(name = "sale_id") val sale_id: Int
+    @NonNull @ColumnInfo(name = "saleId") val sale_id: Int
 ){
     @PrimaryKey(autoGenerate=true) var id: Int = 0
 }

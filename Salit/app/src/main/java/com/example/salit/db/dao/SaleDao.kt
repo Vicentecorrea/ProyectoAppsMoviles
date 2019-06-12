@@ -7,25 +7,25 @@ import com.example.salit.db.models.Sale
 
 @Dao
 interface SaleDao {
-    @Query("SELECT * FROM sales ORDER BY name")
+    @Query("SELECT * FROM sales ORDER BY createdAt")
     fun getAll(): List<Sale>
 
     @Insert
     fun insertAll(vararg sale: Sale)
 
-    @Query("SELECT * FROM sales ORDER BY sale_price DESC")
-    fun getSalesOrderedByPriceDesc()
+    @Query("SELECT * FROM sales ORDER BY salePrice DESC")
+    fun getSalesOrderedByPriceDesc(): List<Sale>
 
-    @Query("SELECT * FROM sales ORDER BY sale_price DESC")
-    fun getSalesOrderedByPriceAsc()
+    @Query("SELECT * FROM sales ORDER BY salePrice DESC")
+    fun getSalesOrderedByPriceAsc(): List<Sale>
 
-    @Query("SELECT * FROM sales WHERE category LIKE :category_name")
-    fun getSalesByCategory(category_name: String): List<Sale>
+    @Query("SELECT * FROM sales WHERE category LIKE :categoryName")
+    fun getSalesByCategory(categoryName: String): List<Sale>
 
-    @Query("SELECT * FROM sales WHERE name LIKE :sale_name")
-    fun getSalesByName(sale_name: String): List<Sale>
+    @Query("SELECT * FROM sales WHERE name LIKE :saleName")
+    fun getSalesByName(saleName: String): List<Sale>
 
-    @Query("SELECT * FROM sales WHERE sale_price < :target_price ORDER BY sale_price ASC")
-    fun getSalesByPriceTarget(target_price: Int)
+    @Query("SELECT * FROM sales WHERE salePrice < :targetPrice ORDER BY salePrice ASC")
+    fun getSalesByPriceTarget(targetPrice: Int): List<Sale>
     
 }
