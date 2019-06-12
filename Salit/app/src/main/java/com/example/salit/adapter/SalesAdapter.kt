@@ -10,7 +10,7 @@ import com.example.salit.R
 import com.example.salit.db.models.Sale
 import java.text.FieldPosition
 
-class saleAdapter(
+class SalesAdapter(
     context: Context,
     private val dataSource: ArrayList<Sale>) : BaseAdapter(){
 

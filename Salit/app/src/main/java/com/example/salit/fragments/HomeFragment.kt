@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.salit.R
+import com.example.salit.adapter.SalesAdapter
 import com.example.salit.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -21,10 +22,18 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadSales()
+    }
+
     private fun loadSales(){
         val saleDao = AppDatabase.getDatabase(context!!).saleDao()
         GlobalScope.launch(Dispatchers.IO){
-
+            val sales = saleDao.getAll()
+            launch(Dispatchers.Main){
+                val itemsAdapter = SalesAdapter(context!!, ArrayList(sales))
+            }
         }
     }
 }
