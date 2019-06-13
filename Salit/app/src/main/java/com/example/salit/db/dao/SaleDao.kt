@@ -25,6 +25,9 @@ interface SaleDao {
     @Query("SELECT * FROM sales WHERE name LIKE :saleName")
     fun getSalesByName(saleName: String): List<Sale>
 
+    @Query("SELECT * FROM sales WHERE name LIKE :saleName AND category LIKE :categoryName")
+    fun getSalesByNameAndCategory(saleName: String, categoryName: String): List<Sale>
+
     @Query("SELECT * FROM sales WHERE salePrice < :targetPrice ORDER BY salePrice ASC")
     fun getSalesByPriceTarget(targetPrice: Int): List<Sale>
     

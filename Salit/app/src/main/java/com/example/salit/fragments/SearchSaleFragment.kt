@@ -13,8 +13,13 @@ import android.widget.ArrayAdapter
 import com.example.salit.Constants
 
 import com.example.salit.R
+import com.example.salit.adapter.SalesAdapter
+import com.example.salit.db.AppDatabase
 import kotlinx.android.synthetic.main.fragment_create_sale.*
 import kotlinx.android.synthetic.main.fragment_search_sale.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class SearchSaleFragment : Fragment() {
@@ -37,14 +42,15 @@ class SearchSaleFragment : Fragment() {
 
     }
 
-    private fun setSpinnerCategories(){
-        val spinnerArray = ArrayAdapter(context!!, android.R.layout.simple_spinner_dropdown_item, Constants.CATEGORY_ARRAY)
+    private fun setSpinnerCategories() {
+        val spinnerArray =
+            ArrayAdapter(context!!, android.R.layout.simple_spinner_dropdown_item, Constants.CATEGORY_ARRAY)
         spinnerArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         categorySpinner.adapter = spinnerArray
     }
 
-    private fun setListeners(){
-        categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+    private fun setListeners() {
+        categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 currentCategory = Constants.CATEGORY_ARRAY[position]
             }
@@ -53,8 +59,38 @@ class SearchSaleFragment : Fragment() {
 
             }
         }
+
+        buttonSearch.setOnClickListener {
+            changeListView()
+        }
     }
 
+    private fun changeListView() {
+        val database = AppDatabase.getDatabase(context!!)
+        val saleDao = database.SaleDao()
+        GlobalScope.launch(Dispatchers.IO) {
+            if (searchEditText.text.toString().isBlank() && currentCategory != Constants.CATEGORY_ARRAY[0]) {
+                val sales = saleDao.getSalesByCategory(currentCategory)
+                launch(Dispatchers.Main) {
+                    val itemsAdapter = SalesAdapter(context!!, ArrayList(sales))
+                    salesListView.adapter = itemsAdapter
+                }
+            } else if (searchEditText.text.toString().isNotBlank() && currentCategory == Constants.CATEGORY_ARRAY[0]) {
+                val sales = saleDao.getSalesByName("%" + searchEditText.text.toString() + "%")
+                launch(Dispatchers.Main) {
+                    val itemsAdapter = SalesAdapter(context!!, ArrayList(sales))
+                    salesListView.adapter = itemsAdapter
+                }
+            } else if (searchEditText.text.toString().isNotBlank() && currentCategory != Constants.CATEGORY_ARRAY[0]) {
+                val sales =
+                    saleDao.getSalesByNameAndCategory("%" + searchEditText.text.toString() + "%", currentCategory)
+                launch(Dispatchers.Main) {
+                    val itemsAdapter = SalesAdapter(context!!, ArrayList(sales))
+                    salesListView.adapter = itemsAdapter
+                }
+            }
+        }
+    }
 
 
 }
