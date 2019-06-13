@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.example.salit.R
 import com.example.salit.adapter.SalesAdapter
 import com.example.salit.db.AppDatabase
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
             val sales = saleDao.getAll()
             launch(Dispatchers.Main){
                 val itemsAdapter = SalesAdapter(context!!, ArrayList(sales))
+                salesListView.adapter = itemsAdapter
             }
         }
     }
