@@ -32,8 +32,9 @@ class SalesAdapter(
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val rowView = inflater.inflate(R.layout.list_item_sale, parent, false)
         rowView.findViewById<TextView>(R.id.saleName).text = dataSource[position].name
-        rowView.findViewById<TextView>(R.id.originalPrice).text = dataSource[position].originalPrice.toString()
-        rowView.findViewById<TextView>(R.id.salePrice).text = dataSource[position].salePrice.toString()
+        rowView.findViewById<TextView>(R.id.originalPrice).text = "Before: $ " + dataSource[position].originalPrice.toString()
+        rowView.findViewById<TextView>(R.id.salePrice).text = "$ " + dataSource[position].salePrice.toString()
+        rowView.findViewById<TextView>(R.id.discountOnPrice).text = ((100 - ((dataSource[position].salePrice*100)/dataSource[position].originalPrice))*-1).toString() + "%"
         return rowView
     }
 }
