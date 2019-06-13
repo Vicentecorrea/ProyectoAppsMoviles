@@ -9,28 +9,36 @@
 
 
     <EditText
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:id="@+id/searchEditText"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
+            app:layout_constraintEnd_toStartOf="@id/buttonSearch"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/salesListView"/>
+            app:layout_constraintBottom_toTopOf="@id/categorySpinner"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonSearch"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/searchEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/search_button"/>
     <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"
             android:id="@+id/categorySpinner"
             android:spinnerMode="dropdown"
-            app:layout_constraintStart_toEndOf="@id/searchEditText"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchEditText"
             app:layout_constraintBottom_toTopOf="@id/salesListView"/>
     <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:id="@+id/salesListView"
-            app:layout_constraintTop_toBottomOf="@id/searchEditText"
+            app:layout_constraintTop_toBottomOf="@id/categorySpinner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
