@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-//            setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
+            setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24px)
         }
         setupNavViewListener()
     }

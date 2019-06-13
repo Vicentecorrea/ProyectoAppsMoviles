@@ -113,9 +113,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/normalPriceInput"
+            app:layout_constraintBottom_toTopOf="@+id/createSaleButton"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toStartOf="@id/spinnerCategories"
             android:text="Category:"
             android:textSize="20sp"
             android:textStyle="bold"/>
@@ -124,7 +124,9 @@
             android:id="@+id/spinnerCategories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            android:spinnerMode="dropdown"
+            android:background="@android:drawable/btn_dropdown"
+            app:layout_constraintStart_toEndOf="@id/categoryTitleTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/normalPriceInput"
             app:layout_constraintBottom_toTopOf="@+id/createSaleButton">

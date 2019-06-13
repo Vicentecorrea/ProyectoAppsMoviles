@@ -3,17 +3,17 @@
     <group android:checkableBehavior="single">
         <item
                 android:id="@+id/home"
-                android:icon="@drawable/ic_launcher_background"
+                android:icon="@drawable/ic_baseline_home_24px"
                 android:title="@string/navigation_drawer_home_title"/>
         <item
                 android:id="@+id/createSale"
-                android:icon="@drawable/ic_launcher_background"
+                android:icon="@drawable/ic_baseline_create_24px"
                 android:title="Create Sale"/>
 
 
         <item
                 android:id="@+id/searchSale"
-                android:icon="@drawable/ic_launcher_background"
+                android:icon="@drawable/ic_baseline_search_24px"
                 android:title="Search"/>
     </group>
 </menu>

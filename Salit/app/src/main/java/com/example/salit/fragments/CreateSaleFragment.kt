@@ -22,7 +22,7 @@ import java.util.*
 
 class CreateSaleFragment : Fragment() {
 
-    private var category = "All"
+    private var category = "All categories"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
