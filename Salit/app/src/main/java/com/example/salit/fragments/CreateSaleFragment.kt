@@ -11,10 +11,18 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.salit.Constants
+import com.example.salit.db.AppDatabase
 import com.example.salit.db.models.Sale
 import kotlinx.android.synthetic.main.fragment_create_sale.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.lang.Exception
+import java.util.*
 
 class CreateSaleFragment : Fragment() {
+
+    private var category = "All"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,16 +35,19 @@ class CreateSaleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setSpinnerCategories()
+        addSpinnerCategoryListener()
+        createSaleButton.setOnClickListener {
+            createSale()
+        }
+    }
+
+    private fun addSpinnerCategoryListener() {
         spinnerCategories.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val text = spinnerCategories.selectedItem.toString()
-                val duration = Toast.LENGTH_SHORT
-                val toast = Toast.makeText(context!!, text, duration)
-                toast.show()
+                category = spinnerCategories.selectedItem.toString()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }
     }
@@ -48,17 +59,36 @@ class CreateSaleFragment : Fragment() {
     }
 
 
-//    private fun createSale() {
-//        val saleObject = createSaleObject()
-//
-//    }
+    private fun createSale() {
+        val saleObject = createSaleObject()
+        storeSaleObject(saleObject)
 
-//    private fun createSaleObject(): Sale {
-//        val name = saleNameEditText.text.toString()
-//        val description = saleDescriptionEditText.text.toString()
-//        var normalPrice = normalPriceInput.text.toString().toInt()
-//        var offerPrice = offerPriceInput.text.toString().toInt()
-//        return Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice)
-//    }
+    }
+
+    private fun storeSaleObject(saleObject: Sale) {
+        val saleDao = AppDatabase.getDatabase(context!!).SaleDao()
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                saleDao.insertAll(saleObject)
+                launch(Dispatchers.Main) {
+                    Toast.makeText(context, "Sale saved successfully", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception){
+                launch(Dispatchers.Main) {
+                    Toast.makeText(context, "Error creating sale ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun createSaleObject(): Sale {
+        val name = saleNameEditText.text.toString()
+        val description = saleDescriptionEditText.text.toString()
+        val normalPrice = normalPriceInput.text.toString().toInt()
+        val offerPrice = offerPriceInput.text.toString().toInt()
+        val isOnline = checkBoxIsOnline.isChecked
+        val currentTime = Calendar.getInstance().time.toString()
+        return Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, category = category)
+    }
 
 }
