@@ -8,9 +8,12 @@
         <item
                 android:id="@+id/createSale"
                 android:icon="@drawable/ic_baseline_create_24px"
-                android:title="Create Sale"/>
+                android:title="Create physical sale"/>
 
-
+        <item
+                android:id="@+id/createOnlineSale"
+                android:icon="@drawable/ic_baseline_create_24px"
+                android:title="Create online sale"/>
         <item
                 android:id="@+id/searchSale"
                 android:icon="@drawable/ic_baseline_search_24px"

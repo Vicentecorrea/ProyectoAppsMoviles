@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import com.example.salit.R
+import com.example.salit.fragments.CreateOnlineSaleFragment
 import com.example.salit.fragments.CreateSaleFragment
 import com.example.salit.fragments.HomeFragment
 import com.example.salit.fragments.SearchSaleFragment
@@ -76,7 +77,17 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         transaction.replace(R.id.contentFrameLayout, CreateSaleFragment(), "createSaleFrag")
                     }
-                    supportActionBar!!.title = "Create Sale"
+                    supportActionBar!!.title = "Create physical sale"
+                }
+
+                R.id.createOnlineSale -> {
+                    val createOnlineSaleFragment = supportFragmentManager.findFragmentByTag("createOnlineSaleFrag")
+                    if (createOnlineSaleFragment != null) {
+                        transaction.replace(R.id.contentFrameLayout, createOnlineSaleFragment)
+                    } else {
+                        transaction.replace(R.id.contentFrameLayout, CreateOnlineSaleFragment(), "createOnlineSaleFrag")
+                    }
+                    supportActionBar!!.title = "Create online sale"
                 }
 
                 R.id.searchSale -> {

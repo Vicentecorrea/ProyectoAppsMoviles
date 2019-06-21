@@ -12,7 +12,7 @@ import android.support.annotation.NonNull
 
 
 @Database(
-    entities = [Image::class, Link::class, Location::class, Sale::class],
+    entities = [Image::class, Location::class, Sale::class],
     version = 1,
     exportSchema = false
 )

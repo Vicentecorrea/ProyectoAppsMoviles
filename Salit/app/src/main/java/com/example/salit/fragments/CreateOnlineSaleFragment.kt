@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 
-class CreateSaleFragment : Fragment() {
+class CreateOnlineSaleFragment : Fragment() {
 
     private var category = "All categories"
 
@@ -37,7 +37,7 @@ class CreateSaleFragment : Fragment() {
         setSpinnerCategories()
         addSpinnerCategoryListener()
         createSaleButton.setOnClickListener {
-            createSale()
+            createOnlineSale()
         }
     }
 
@@ -59,17 +59,18 @@ class CreateSaleFragment : Fragment() {
     }
 
 
-    private fun createSale() {
-        val saleObject = createSaleObject()
-        storeSaleObject(saleObject)
+    private fun createOnlineSale() {
+        val saleObject = createOnlineSaleObject()
+        storeOnlineSaleObject(saleObject)
 
     }
 
-    private fun storeSaleObject(saleObject: Sale) {
+    private fun storeOnlineSaleObject(saleObject: Sale) {
         val saleDao = AppDatabase.getDatabase(context!!).SaleDao()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 saleDao.insertAll(saleObject)
+
                 launch(Dispatchers.Main) {
                     Toast.makeText(context, "Sale saved successfully", Toast.LENGTH_SHORT).show()
                 }
@@ -81,14 +82,15 @@ class CreateSaleFragment : Fragment() {
         }
     }
 
-    private fun createSaleObject(): Sale {
+    private fun createOnlineSaleObject(): Sale {
         val name = saleNameEditText.text.toString()
         val description = saleDescriptionEditText.text.toString()
         val normalPrice = normalPriceInput.text.toString().toInt()
         val offerPrice = offerPriceInput.text.toString().toInt()
-        val isOnline = false
+        val isOnline = true
         val currentTime = Calendar.getInstance().time.toString()
-        return Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, category = category, link = null)
+        val link = linkEditText.text.toString()
+        return Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, category = category, link = link)
     }
 
 }

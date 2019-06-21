@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            tools:context=".fragments.CreateSaleFragment">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".fragments.CreateSaleFragment">
 
     <TextView
             android:id="@+id/nameTitleTextView"
@@ -13,7 +13,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/saleNameEditText"
             android:layout_marginStart="30dp"
             android:layout_marginTop="12dp"
             android:text="Name:"
@@ -28,8 +27,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/saleDescriptionEditText"
+            app:layout_constraintTop_toBottomOf="@id/nameTitleTextView"
+            app:layout_constraintBottom_toTopOf="@+id/descriptionTitleTextView"
             android:background="@color/colorInput"/>
 
     <TextView
@@ -52,8 +51,8 @@
             android:layout_marginEnd="30sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/saleNameEditText"
-            app:layout_constraintBottom_toTopOf="@+id/normalPriceInput"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTitleTextView"
+            app:layout_constraintBottom_toTopOf="@+id/normalPriceTitleTextView"
             android:background="@color/colorInput"/>
 
     <TextView
@@ -77,8 +76,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/offerPriceInput"
-            app:layout_constraintTop_toBottomOf="@+id/saleDescriptionEditText"
-            app:layout_constraintBottom_toTopOf="@+id/linkTextView"
+            app:layout_constraintTop_toBottomOf="@+id/normalPriceTitleTextView"
             android:background="@color/colorInput">
     </EditText>
 
@@ -88,7 +86,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/offerPriceInput"
             app:layout_constraintTop_toBottomOf="@+id/saleDescriptionEditText"
-            android:layout_marginEnd="30dp"
             android:layout_marginTop="20dp"
             android:text="Offer price:"
             android:textSize="20sp"
@@ -103,8 +100,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@+id/normalPriceInput"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/saleDescriptionEditText"
-            app:layout_constraintBottom_toTopOf="@+id/linkTextView"
+            app:layout_constraintTop_toBottomOf="@+id/offerPriceTitleTextView"
+
             android:background="@color/colorInput">
     </EditText>
 
@@ -112,7 +109,7 @@
             android:id="@+id/linkTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/linkEditText"
+            app:layout_constraintTop_toBottomOf="@id/normalPriceInput"
             app:layout_constraintStart_toStartOf="@id/linkEditText"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="20dp"
@@ -126,10 +123,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30sp"
             android:layout_marginEnd="30sp"
-            app:layout_constraintTop_toBottomOf="@id/normalPriceInput"
+            app:layout_constraintTop_toBottomOf="@id/linkTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/categoryTitleTextView"
             android:background="@color/colorInput">
     </EditText>
 
@@ -158,14 +154,14 @@
     </Spinner>
 
     <!--<CheckBox-->
-            <!--android:id="@+id/checkBoxIsOnline"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/spinnerCategories"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--android:layout_marginStart="30dp"-->
-            <!--android:text="Is online"/>-->
+    <!--android:id="@+id/checkBoxIsOnline"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/spinnerCategories"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--android:layout_marginStart="30dp"-->
+    <!--android:text="Is online"/>-->
 
     <Button
             android:id="@+id/createSaleButton"

@@ -35,6 +35,7 @@ class SalesAdapter(
         rowView.findViewById<TextView>(R.id.originalPrice).text = "Before: $ " + dataSource[position].originalPrice.toString()
         rowView.findViewById<TextView>(R.id.salePrice).text = "$ " + dataSource[position].salePrice.toString()
         rowView.findViewById<TextView>(R.id.discountOnPrice).text = ((100 - ((dataSource[position].salePrice*100)/dataSource[position].originalPrice))*-1).toString() + "%"
+        rowView.findViewById<TextView>(R.id.link).text = dataSource[position].link
         return rowView
     }
 }
