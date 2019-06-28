@@ -212,15 +212,16 @@ class CreateSaleFragment : Fragment() {
         val isOnline = false
         val currentTime = Calendar.getInstance().time.toString()
         val name = saleNameEditText.text.toString()
+        val currentUserEmail = CredentialsManager.getInstance(context!!).loadUser()!!.first
         val description = saleDescriptionEditText.text.toString()
         val thisSale: Sale
         if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank()){
             Toast.makeText(context, "You must fill all the fields", Toast.LENGTH_SHORT).show()
-            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null, photoUri = currentPhotoPath)
+            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null, photoUri = currentPhotoPath, userEmail = currentUserEmail)
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
             val offerPrice = offerPriceInput.text.toString().toInt()
-            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null, photoUri = currentPhotoPath)
+            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null, photoUri = currentPhotoPath, userEmail = currentUserEmail)
         }
         return thisSale
     }

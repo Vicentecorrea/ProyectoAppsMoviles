@@ -28,6 +28,8 @@
                     android:resource="@xml/file_paths"/>
         </provider>
 
+        <activity android:name=".activities.LoginActivity">
+        </activity>
         <activity
                 android:name=".activities.WebViewActivity"
                 android:label="@string/title_activity_web_view"
