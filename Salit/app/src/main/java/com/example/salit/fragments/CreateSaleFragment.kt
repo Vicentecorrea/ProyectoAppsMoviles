@@ -1,8 +1,17 @@
 package com.example.salit.fragments
 
 
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.support.v4.app.Fragment
+import android.support.v4.content.FileProvider
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,12 +35,16 @@ import kotlinx.android.synthetic.main.fragment_create_sale.spinnerCategories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.IOException
 import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.util.*
 
 class CreateSaleFragment : Fragment() {
 
     private var category = 1
+    private var currentPhotoPath: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +58,64 @@ class CreateSaleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setSpinnerCategories()
         addSpinnerCategoryListener()
+        setTakePhotoButtonListener()
         createSaleButton.setOnClickListener {
             createSale()
+        }
+    }
+
+    private fun setTakePhotoButtonListener() {
+        takePhotoImageButton.setOnClickListener {
+            if (hasCamera()) {
+                dispatchToCameraActivity()
+            } else {
+                Toast.makeText(context!!, "Your device doesn't have a camera built in", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun hasCamera(): Boolean {
+        return context!!.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
+    }
+
+    private fun dispatchToCameraActivity() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(context!!.packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    Log.d("ERROR", "Error creating file: ${ex.message}")
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        context!!,
+                        "com.example.android.fileprovider",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, 2)
+                }
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = context!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
         }
     }
 
@@ -81,9 +150,39 @@ class CreateSaleFragment : Fragment() {
                 spinnerCategories!!.adapter = spinnerArray
             }
         }
-
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+            setPic()
+        }
+    }
+
+    private fun setPic() {
+        // Get the dimensions of the View
+        takePhotoImageButton.setPadding(0, 0, 0, 0)
+        val targetW: Int = takePhotoImageButton.width
+        val targetH: Int = takePhotoImageButton.height
+
+        val bmOptions = BitmapFactory.Options().apply {
+            // Get the dimensions of the bitmap
+            inJustDecodeBounds = true
+            BitmapFactory.decodeFile(currentPhotoPath, this)
+            val photoW: Int = outWidth
+            val photoH: Int = outHeight
+
+            // Determine how much to scale down the image
+            val scaleFactor: Int = Math.min(photoW / targetW, photoH / targetH)
+
+            // Decode the image file into a Bitmap sized to fill the View
+            inJustDecodeBounds = false
+            inSampleSize = scaleFactor
+        }
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions)?.also { bitmap ->
+            takePhotoImageButton.setImageBitmap(bitmap)
+        }
+    }
 
     private fun createSale() {
         val saleObject = createSaleObject()
@@ -117,11 +216,11 @@ class CreateSaleFragment : Fragment() {
         val thisSale: Sale
         if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank()){
             Toast.makeText(context, "You must fill all the fields", Toast.LENGTH_SHORT).show()
-            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null)
+            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null, photoUri = currentPhotoPath)
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
             val offerPrice = offerPriceInput.text.toString().toInt()
-            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null)
+            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null, photoUri = currentPhotoPath)
         }
         return thisSale
     }

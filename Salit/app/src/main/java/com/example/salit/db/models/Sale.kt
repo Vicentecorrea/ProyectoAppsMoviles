@@ -25,7 +25,8 @@ data class Sale(
     @NonNull @ColumnInfo(name = "salePrice") val salePrice: Int,
     @NonNull @ColumnInfo(name = "isOnline") val isOnline: Boolean,
     @NonNull @ColumnInfo(name = "createdAt") val createdAt: String,
-    @ColumnInfo(name = "link") val link: String?
+    @ColumnInfo(name = "link") val link: String?,
+    @ColumnInfo(name = "photoUri") val photoUri: String?
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
