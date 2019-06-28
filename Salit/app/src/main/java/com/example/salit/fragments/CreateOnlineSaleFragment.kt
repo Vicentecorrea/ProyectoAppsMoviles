@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.salit.Constants
+import com.example.salit.activities.MainActivity
 import com.example.salit.db.AppDatabase
 import com.example.salit.db.models.Sale
 import kotlinx.android.synthetic.main.fragment_create_online_sale.*
@@ -82,7 +83,7 @@ class CreateOnlineSaleFragment : Fragment() {
                 saleDao.insertAll(saleObject)
 
                 launch(Dispatchers.Main) {
-                    Toast.makeText(context, "Sale saved successfully", Toast.LENGTH_SHORT).show()
+                    (activity as MainActivity).goToHomeFragment()
                 }
             } catch (e: Exception){
                 launch(Dispatchers.Main) {

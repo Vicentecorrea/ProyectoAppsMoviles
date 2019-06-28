@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
+import android.widget.Toast
 import com.example.salit.R
 import com.example.salit.fragments.CreateOnlineSaleFragment
 import com.example.salit.fragments.CreateSaleFragment
@@ -27,6 +28,19 @@ class MainActivity : AppCompatActivity() {
         val fragment = HomeFragment()
         fragmentTransaction.add(R.id.contentFrameLayout, fragment)
         fragmentTransaction.commit()
+    }
+
+    fun goToHomeFragment() {
+        Toast.makeText(this, "Sale saved successfully", Toast.LENGTH_SHORT).show()
+        val transaction = supportFragmentManager.beginTransaction()
+        val homeFragment = supportFragmentManager.findFragmentByTag("homeFrag")
+        if (homeFragment != null) {
+            transaction.replace(R.id.contentFrameLayout, homeFragment)
+        } else {
+            transaction.replace(R.id.contentFrameLayout, HomeFragment(), "homeFrag")
+        }
+        supportActionBar!!.title = getString(R.string.action_bar_home_title)
+        transaction.commit()
     }
 
     private fun setToolbar() {
