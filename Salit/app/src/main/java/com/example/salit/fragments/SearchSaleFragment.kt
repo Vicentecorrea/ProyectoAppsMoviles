@@ -47,8 +47,8 @@ class SearchSaleFragment : Fragment() {
         val database = AppDatabase.getDatabase(context!!)
         val categoryDao = database.CategoryDao()
         GlobalScope.launch(Dispatchers.IO){
+            val categoriesObjects = categoryDao.getAll()
             launch(Dispatchers.Main){
-                val categoriesObjects = categoryDao.getAll()
                 val categories = mutableListOf<String>()
                 for (category in categoriesObjects){
                     categories.add(category.name!!)

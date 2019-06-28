@@ -56,9 +56,7 @@ class CreateOnlineSaleFragment : Fragment() {
                 val categoryName = spinnerCategories.selectedItem.toString()
                 GlobalScope.launch(Dispatchers.IO) {
                     val categoryDao = AppDatabase.getDatabase(context!!).CategoryDao()
-                    launch(Dispatchers.Main) {
-                        category = categoryDao.getCategoryId(categoryName)
-                    }
+                    category = categoryDao.getCategoryId(categoryName)
                 }
 
             }
