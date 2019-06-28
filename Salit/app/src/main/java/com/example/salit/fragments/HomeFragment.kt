@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.salit.R
+import com.example.salit.activities.SaleDetailsActivity
 import com.example.salit.activities.WebViewActivity
 import com.example.salit.adapter.SalesAdapter
 import com.example.salit.db.AppDatabase
@@ -52,7 +53,10 @@ class HomeFragment : Fragment() {
                     Intent(context, WebViewActivity::class.java).
                         putExtra("SALE_LINK", selectedSale.link))
             } else {
-                // do in physical sale
+                startActivity(
+                    Intent(context, SaleDetailsActivity::class.java).
+                            putExtra("SALE_ID", selectedSale.id)
+                )
             }
         }
     }
