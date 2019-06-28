@@ -5,4 +5,9 @@
     <string name="navigation_drawer_home_title">Home</string>
     <string name="search_button">Search</string>
     <string name="title_activity_web_view">WebViewActivity</string>
+
+    <string name="credentials_shared_preference_file">com.example.lab.CREDENTIALS_PREFERENCE_FILE_KEY</string>
+    <string name="useremail_credential_key">EMAIL</string>
+    <string name="password_credential_key">PASSWORD</string>
+    <string name="default_empty_credential_value"></string>
 </resources>

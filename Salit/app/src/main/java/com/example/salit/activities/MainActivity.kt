@@ -1,17 +1,25 @@
 package com.example.salit.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import android.widget.Toast
+import com.example.lab.CredentialsManager
 import com.example.salit.R
+import com.example.salit.db.AppDatabase
+import com.example.salit.db.models.User
 import com.example.salit.fragments.CreateOnlineSaleFragment
 import com.example.salit.fragments.CreateSaleFragment
 import com.example.salit.fragments.HomeFragment
 import com.example.salit.fragments.SearchSaleFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private var currentLoadedFragment: Fragment? = null
@@ -19,8 +27,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        startHomeView()
         setToolbar()
+        loadUserDataOrSendToLoginActivity()
     }
 
     private fun startHomeView() {
@@ -28,6 +36,27 @@ class MainActivity : AppCompatActivity() {
         val fragment = HomeFragment()
         fragmentTransaction.add(R.id.contentFrameLayout, fragment)
         fragmentTransaction.commit()
+    }
+
+    private fun loadUserDataOrSendToLoginActivity(){
+        val userData = loadUserData()
+        if (userData != null) {
+            initializeHomeFragment()
+        } else{
+            goToLoginActivity()
+        }
+    }
+
+    private fun loadUserData(): Pair<String, String>? {
+        return CredentialsManager.getInstance(baseContext).loadUser()
+    }
+
+    private fun initializeHomeFragment(){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.contentFrameLayout, HomeFragment(), "homeFrag")
+        transaction.commit()
+        navView.menu.getItem(0).isChecked = true
+        supportActionBar!!.title = "Home"
     }
 
     fun goToHomeFragment() {
@@ -41,6 +70,42 @@ class MainActivity : AppCompatActivity() {
         }
         supportActionBar!!.title = getString(R.string.action_bar_home_title)
         transaction.commit()
+    }
+
+    private fun goToLoginActivity(){
+        if (currentLoadedFragment != null){
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.remove(currentLoadedFragment!!).commit()
+        }
+
+        startActivityForResult(Intent(this, LoginActivity::class.java), 1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            1 -> {
+                if (resultCode == Activity.RESULT_OK){
+                    if (data != null){
+                        storeUserCredentials(data.extras!!)
+                        initializeHomeFragment()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun storeUserCredentials(bundle: Bundle){
+        val userEmail = bundle.getString("EMAIL")!!
+        val userPassword = bundle.getString("PASSWORD")!!
+        CredentialsManager.getInstance(baseContext).saveUser(userEmail, userPassword)
+        GlobalScope.launch(Dispatchers.IO) {
+            val user : User? = AppDatabase.getDatabase(baseContext).UserDao().getUser(userEmail)
+            if (user == null){
+                AppDatabase.getDatabase(baseContext).UserDao().insertAll(User(userEmail))
+            }
+        }
+
     }
 
     private fun setToolbar() {

@@ -10,20 +10,21 @@ import com.example.salit.db.models.*
 import java.util.concurrent.Executors
 import android.support.annotation.NonNull
 import com.example.salit.db.dao.CategoryDao
+import com.example.salit.db.dao.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
 @Database(
-    entities = [Image::class, Location::class, Sale::class, Category::class],
+    entities = [Image::class, Location::class, Sale::class, Category::class, User::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun SaleDao(): SaleDao
     abstract fun CategoryDao(): CategoryDao
-
+    abstract fun UserDao(): UserDao
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null

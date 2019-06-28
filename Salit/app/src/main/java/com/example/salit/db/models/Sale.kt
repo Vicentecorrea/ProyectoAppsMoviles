@@ -9,12 +9,21 @@ import android.support.annotation.NonNull
 import java.util.*
 
 @Entity(
-    tableName = "sales", foreignKeys = [ForeignKey(
-        entity = Category::class,
-        parentColumns = arrayOf("id"),
-        childColumns = arrayOf("categoryId"),
-        onDelete = CASCADE
-    )]
+    tableName = "sales", foreignKeys = [
+        ForeignKey(
+            entity = Category::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("categoryId"),
+            onDelete = CASCADE
+        ),
+
+        ForeignKey(
+            entity = User::class,
+            parentColumns = arrayOf("email"),
+            childColumns = arrayOf("userEmail"),
+            onDelete = CASCADE
+        )
+    ]
 )
 
 data class Sale(
@@ -25,6 +34,7 @@ data class Sale(
     @NonNull @ColumnInfo(name = "salePrice") val salePrice: Int,
     @NonNull @ColumnInfo(name = "isOnline") val isOnline: Boolean,
     @NonNull @ColumnInfo(name = "createdAt") val createdAt: String,
+    @NonNull @ColumnInfo(name = "userEmail") val userEmail: String,
     @ColumnInfo(name = "link") val link: String?
 ) {
     @PrimaryKey(autoGenerate = true)

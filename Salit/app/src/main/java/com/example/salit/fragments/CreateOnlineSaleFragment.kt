@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.example.lab.CredentialsManager
 import com.example.salit.Constants
 import com.example.salit.activities.MainActivity
 import com.example.salit.db.AppDatabase
@@ -114,6 +115,7 @@ class CreateOnlineSaleFragment : Fragment() {
         val currentTime = Calendar.getInstance().time.toString()
         val name = saleNameEditText.text.toString()
         val description = saleDescriptionEditText.text.toString()
+        val currentUserEmail = CredentialsManager.getInstance(context!!).loadUser()!!.first
         val link = linkEditText.text.toString()
         val thisSale: Sale
         if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank() || link.isNullOrBlank()) {
@@ -126,7 +128,8 @@ class CreateOnlineSaleFragment : Fragment() {
                 isOnline = isOnline,
                 createdAt = currentTime,
                 categoryId = category,
-                link = null
+                link = null,
+                userEmail = currentUserEmail
             )
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
@@ -139,7 +142,8 @@ class CreateOnlineSaleFragment : Fragment() {
                 isOnline = isOnline,
                 createdAt = currentTime,
                 categoryId = category,
-                link = link
+                link = link,
+                userEmail = currentUserEmail
             )
         }
         return thisSale
