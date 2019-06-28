@@ -8,11 +8,18 @@ import android.arch.persistence.room.PrimaryKey
 import android.support.annotation.NonNull
 import java.util.*
 
-@Entity(tableName = "sales")
+@Entity(
+    tableName = "sales", foreignKeys = [ForeignKey(
+        entity = Category::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("categoryId"),
+        onDelete = CASCADE
+    )]
+)
 
 data class Sale(
     @NonNull @ColumnInfo(name = "name") val name: String,
-    @NonNull @ColumnInfo(name = "category") val category: String,
+    @NonNull @ColumnInfo(name = "categoryId") val categoryId: Int,
     @NonNull @ColumnInfo(name = "description") val description: String,
     @NonNull @ColumnInfo(name = "originalPrice") val originalPrice: Int,
     @NonNull @ColumnInfo(name = "salePrice") val salePrice: Int,
@@ -20,5 +27,6 @@ data class Sale(
     @NonNull @ColumnInfo(name = "createdAt") val createdAt: String,
     @ColumnInfo(name = "link") val link: String?
 ) {
-    @PrimaryKey(autoGenerate = true) var id: Int = 0
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
 }

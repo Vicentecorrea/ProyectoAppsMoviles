@@ -9,15 +9,20 @@ import com.example.salit.db.dao.SaleDao
 import com.example.salit.db.models.*
 import java.util.concurrent.Executors
 import android.support.annotation.NonNull
+import com.example.salit.db.dao.CategoryDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 @Database(
-    entities = [Image::class, Location::class, Sale::class],
+    entities = [Image::class, Location::class, Sale::class, Category::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun SaleDao(): SaleDao
+    abstract fun CategoryDao(): CategoryDao
 
     companion object {
         @Volatile
@@ -33,12 +38,24 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "AppDatabase"
-                ).build()
+                ).addCallback(object : Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+                        GlobalScope.launch(Dispatchers.IO) {
+                            val database = getDatabase(context)
+                            val categoryDao = database.CategoryDao()
+                            categoryDao.insertAll(Category("All categories"))
+                            categoryDao.insertAll(Category("Fashion"))
+                            categoryDao.insertAll(Category("Technology"))
+                            categoryDao.insertAll(Category("Sport"))
+                            categoryDao.insertAll(Category("Others"))
+                        }
+                    }
+                }).build()
                 INSTANCE = instance
                 return instance
             }
         }
-
     }
 }
 

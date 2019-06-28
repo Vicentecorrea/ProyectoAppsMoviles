@@ -15,6 +15,7 @@ import com.example.salit.Constants
 import com.example.salit.R
 import com.example.salit.adapter.SalesAdapter
 import com.example.salit.db.AppDatabase
+import com.example.salit.db.dao.CategoryDao
 import kotlinx.android.synthetic.main.fragment_create_sale.*
 import kotlinx.android.synthetic.main.fragment_search_sale.*
 import kotlinx.coroutines.Dispatchers
@@ -43,10 +44,22 @@ class SearchSaleFragment : Fragment() {
     }
 
     private fun setSpinnerCategories() {
-        val spinnerArray =
-            ArrayAdapter(context!!, android.R.layout.simple_spinner_dropdown_item, Constants.CATEGORY_ARRAY)
-        spinnerArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        categorySpinner.adapter = spinnerArray
+        val database = AppDatabase.getDatabase(context!!)
+        val categoryDao = database.CategoryDao()
+        GlobalScope.launch(Dispatchers.IO){
+            launch(Dispatchers.Main){
+                val categoriesObjects = categoryDao.getAll()
+                val categories = mutableListOf<String>()
+                for (category in categoriesObjects){
+                    categories.add(category.name!!)
+                }
+                val spinnerArray =
+                    ArrayAdapter(context!!, android.R.layout.simple_spinner_dropdown_item, categories)
+                spinnerArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                categorySpinner.adapter = spinnerArray
+            }
+        }
+
     }
 
     private fun setListeners() {
@@ -68,9 +81,6 @@ class SearchSaleFragment : Fragment() {
     private fun changeListView() {
         val database = AppDatabase.getDatabase(context!!)
         val saleDao = database.SaleDao()
-        var a = searchEditText.text.toString()
-        var b = currentCategory
-        var c = Constants.CATEGORY_ARRAY[0]
         GlobalScope.launch(Dispatchers.IO) {
             if (searchEditText.text.toString().isBlank() && currentCategory != Constants.CATEGORY_ARRAY[0]) {
                 val sales = saleDao.getSalesByCategory(currentCategory)

@@ -1,6 +1,6 @@
 package com.example.salit.fragments
 
-import android.R
+
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -13,8 +13,16 @@ import android.widget.Toast
 import com.example.salit.Constants
 import com.example.salit.activities.MainActivity
 import com.example.salit.db.AppDatabase
+import com.example.salit.db.models.Category
 import com.example.salit.db.models.Sale
+import kotlinx.android.synthetic.main.fragment_create_online_sale.*
 import kotlinx.android.synthetic.main.fragment_create_sale.*
+import kotlinx.android.synthetic.main.fragment_create_sale.createSaleButton
+import kotlinx.android.synthetic.main.fragment_create_sale.normalPriceInput
+import kotlinx.android.synthetic.main.fragment_create_sale.offerPriceInput
+import kotlinx.android.synthetic.main.fragment_create_sale.saleDescriptionEditText
+import kotlinx.android.synthetic.main.fragment_create_sale.saleNameEditText
+import kotlinx.android.synthetic.main.fragment_create_sale.spinnerCategories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,7 +31,7 @@ import java.util.*
 
 class CreateSaleFragment : Fragment() {
 
-    private var category = "All categories"
+    private var category = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +53,11 @@ class CreateSaleFragment : Fragment() {
     private fun addSpinnerCategoryListener() {
         spinnerCategories.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                category = spinnerCategories.selectedItem.toString()
+                val categoryName = spinnerCategories.selectedItem.toString()
+                GlobalScope.launch(Dispatchers.IO) {
+                    val categoryDao = AppDatabase.getDatabase(context!!).CategoryDao()
+                    category = categoryDao.getCategoryId(categoryName)
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -54,9 +66,22 @@ class CreateSaleFragment : Fragment() {
     }
 
     private fun setSpinnerCategories() {
-        val spinnerArray = ArrayAdapter(context!!, R.layout.simple_spinner_dropdown_item, Constants.CATEGORY_ARRAY)
-        spinnerArray.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-        spinnerCategories!!.adapter = spinnerArray
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val categoryDao = AppDatabase.getDatabase(context!!).CategoryDao()
+            val categories = mutableListOf<String>()
+            val categoryObjects = categoryDao.getAll()
+            launch(Dispatchers.Main) {
+
+                for (category in categoryObjects){
+                    categories.add(category.name!!)
+                }
+                val spinnerArray = ArrayAdapter(context!!, android.R.layout.simple_spinner_dropdown_item, categories)
+                spinnerArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerCategories!!.adapter = spinnerArray
+            }
+        }
+
     }
 
 
@@ -89,14 +114,14 @@ class CreateSaleFragment : Fragment() {
         val currentTime = Calendar.getInstance().time.toString()
         val name = saleNameEditText.text.toString()
         val description = saleDescriptionEditText.text.toString()
-        var thisSale: Sale
+        val thisSale: Sale
         if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank()){
             Toast.makeText(context, "You must fill all the fields", Toast.LENGTH_SHORT).show()
-            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, category = category, link = null)
+            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null)
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
             val offerPrice = offerPriceInput.text.toString().toInt()
-            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, category = category, link = null)
+            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null)
         }
         return thisSale
     }
