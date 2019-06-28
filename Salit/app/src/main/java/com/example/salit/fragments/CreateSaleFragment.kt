@@ -75,8 +75,8 @@ class CreateSaleFragment : Fragment() {
                 for (category in categoryObjects){
                     categories.add(category.name!!)
                 }
-                val spinnerArray = ArrayAdapter(context!!, R.layout.simple_spinner_dropdown_item, categories)
-                spinnerArray.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+                val spinnerArray = ArrayAdapter(context!!, android.R.layout.simple_spinner_dropdown_item, categories)
+                spinnerArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerCategories!!.adapter = spinnerArray
             }
         }
