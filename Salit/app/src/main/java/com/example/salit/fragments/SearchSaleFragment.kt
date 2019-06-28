@@ -68,6 +68,9 @@ class SearchSaleFragment : Fragment() {
     private fun changeListView() {
         val database = AppDatabase.getDatabase(context!!)
         val saleDao = database.SaleDao()
+        var a = searchEditText.text.toString()
+        var b = currentCategory
+        var c = Constants.CATEGORY_ARRAY[0]
         GlobalScope.launch(Dispatchers.IO) {
             if (searchEditText.text.toString().isBlank() && currentCategory != Constants.CATEGORY_ARRAY[0]) {
                 val sales = saleDao.getSalesByCategory(currentCategory)
@@ -84,6 +87,12 @@ class SearchSaleFragment : Fragment() {
             } else if (searchEditText.text.toString().isNotBlank() && currentCategory != Constants.CATEGORY_ARRAY[0]) {
                 val sales =
                     saleDao.getSalesByNameAndCategory("%" + searchEditText.text.toString() + "%", currentCategory)
+                launch(Dispatchers.Main) {
+                    val itemsAdapter = SalesAdapter(context!!, ArrayList(sales))
+                    salesListView.adapter = itemsAdapter
+                }
+            } else if (searchEditText.text.toString().isBlank() && currentCategory == Constants.CATEGORY_ARRAY[0]) {
+                val sales = saleDao.getAll()
                 launch(Dispatchers.Main) {
                     val itemsAdapter = SalesAdapter(context!!, ArrayList(sales))
                     salesListView.adapter = itemsAdapter

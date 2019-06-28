@@ -61,8 +61,9 @@ class CreateSaleFragment : Fragment() {
 
     private fun createSale() {
         val saleObject = createSaleObject()
-        storeSaleObject(saleObject)
-
+        if (saleObject.name != ""){
+            storeSaleObject(saleObject)
+        }
     }
 
     private fun storeSaleObject(saleObject: Sale) {
@@ -82,13 +83,20 @@ class CreateSaleFragment : Fragment() {
     }
 
     private fun createSaleObject(): Sale {
-        val name = saleNameEditText.text.toString()
-        val description = saleDescriptionEditText.text.toString()
-        val normalPrice = normalPriceInput.text.toString().toInt()
-        val offerPrice = offerPriceInput.text.toString().toInt()
         val isOnline = false
         val currentTime = Calendar.getInstance().time.toString()
-        return Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, category = category, link = null)
+        val name = saleNameEditText.text.toString()
+        val description = saleDescriptionEditText.text.toString()
+        var thisSale: Sale
+        if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank()){
+            Toast.makeText(context, "You must fill all the fields", Toast.LENGTH_SHORT).show()
+            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, category = category, link = null)
+        } else {
+            val normalPrice = normalPriceInput.text.toString().toInt()
+            val offerPrice = offerPriceInput.text.toString().toInt()
+            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, category = category, link = null)
+        }
+        return thisSale
     }
 
 }

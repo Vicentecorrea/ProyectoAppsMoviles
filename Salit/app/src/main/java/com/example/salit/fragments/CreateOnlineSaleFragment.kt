@@ -13,7 +13,16 @@ import android.widget.Toast
 import com.example.salit.Constants
 import com.example.salit.db.AppDatabase
 import com.example.salit.db.models.Sale
+import kotlinx.android.synthetic.main.fragment_create_online_sale.*
 import kotlinx.android.synthetic.main.fragment_create_sale.*
+import kotlinx.android.synthetic.main.fragment_create_online_sale.createSaleButton
+import kotlinx.android.synthetic.main.fragment_create_online_sale.normalPriceInput
+import kotlinx.android.synthetic.main.fragment_create_online_sale.offerPriceInput
+import kotlinx.android.synthetic.main.fragment_create_online_sale.saleDescriptionEditText
+import kotlinx.android.synthetic.main.fragment_create_online_sale.saleNameEditText
+import kotlinx.android.synthetic.main.fragment_create_online_sale.spinnerCategories
+import kotlinx.android.synthetic.main.fragment_create_online_sale.linkEditText
+import kotlinx.android.synthetic.main.list_item_sale.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,7 +38,7 @@ class CreateOnlineSaleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(com.example.salit.R.layout.fragment_create_sale, container, false)
+        return inflater.inflate(com.example.salit.R.layout.fragment_create_online_sale, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,8 +70,9 @@ class CreateOnlineSaleFragment : Fragment() {
 
     private fun createOnlineSale() {
         val saleObject = createOnlineSaleObject()
-        storeOnlineSaleObject(saleObject)
-
+        if (saleObject.name != ""){
+            storeOnlineSaleObject(saleObject)
+        }
     }
 
     private fun storeOnlineSaleObject(saleObject: Sale) {
@@ -83,14 +93,21 @@ class CreateOnlineSaleFragment : Fragment() {
     }
 
     private fun createOnlineSaleObject(): Sale {
-        val name = saleNameEditText.text.toString()
-        val description = saleDescriptionEditText.text.toString()
-        val normalPrice = normalPriceInput.text.toString().toInt()
-        val offerPrice = offerPriceInput.text.toString().toInt()
         val isOnline = true
         val currentTime = Calendar.getInstance().time.toString()
+        val name = saleNameEditText.text.toString()
+        val description = saleDescriptionEditText.text.toString()
         val link = linkEditText.text.toString()
-        return Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, category = category, link = link)
+        var thisSale: Sale
+        if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank() || link.isNullOrBlank()){
+            Toast.makeText(context, "You must fill all the fields", Toast.LENGTH_SHORT).show()
+            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, category = category, link = null)
+        } else {
+            val normalPrice = normalPriceInput.text.toString().toInt()
+            val offerPrice = offerPriceInput.text.toString().toInt()
+            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, category = category, link = link)
+        }
+        return thisSale
     }
 
 }
