@@ -1,6 +1,5 @@
 package com.example.salit.fragments
 
-import android.R
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -31,7 +30,7 @@ import java.util.*
 
 class CreateOnlineSaleFragment : Fragment() {
 
-    private var category = "All categories"
+    private var category = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +52,14 @@ class CreateOnlineSaleFragment : Fragment() {
     private fun addSpinnerCategoryListener() {
         spinnerCategories.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                category = spinnerCategories.selectedItem.toString()
+                val categoryName = spinnerCategories.selectedItem.toString()
+                GlobalScope.launch(Dispatchers.IO) {
+                    val categoryDao = AppDatabase.getDatabase(context!!).CategoryDao()
+                    launch(Dispatchers.Main) {
+                        category = categoryDao.getCategoryId(categoryName)
+                    }
+                }
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -62,15 +68,27 @@ class CreateOnlineSaleFragment : Fragment() {
     }
 
     private fun setSpinnerCategories() {
-        val spinnerArray = ArrayAdapter(context!!, R.layout.simple_spinner_dropdown_item, Constants.CATEGORY_ARRAY)
-        spinnerArray.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-        spinnerCategories!!.adapter = spinnerArray
+        val categories = mutableListOf<String>()
+        GlobalScope.launch(Dispatchers.IO) {
+            val categoryDao = AppDatabase.getDatabase(context!!).CategoryDao()
+            val categoryObjects = categoryDao.getAll()
+            launch(Dispatchers.Main) {
+                for (category in categoryObjects){
+                    categories.add(category.name!!)
+                }
+                val spinnerArray = ArrayAdapter(context!!, R.layout.simple_spinner_dropdown_item, categories)
+
+                spinnerArray.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+                spinnerCategories!!.adapter = spinnerArray
+            }
+        }
+
     }
 
 
     private fun createOnlineSale() {
         val saleObject = createOnlineSaleObject()
-        if (saleObject.name != ""){
+        if (saleObject.name != "") {
             storeOnlineSaleObject(saleObject)
         }
     }
@@ -84,7 +102,7 @@ class CreateOnlineSaleFragment : Fragment() {
                 launch(Dispatchers.Main) {
                     Toast.makeText(context, "Sale saved successfully", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 launch(Dispatchers.Main) {
                     Toast.makeText(context, "Error creating sale ${e.message}", Toast.LENGTH_LONG).show()
                 }
@@ -98,14 +116,32 @@ class CreateOnlineSaleFragment : Fragment() {
         val name = saleNameEditText.text.toString()
         val description = saleDescriptionEditText.text.toString()
         val link = linkEditText.text.toString()
-        var thisSale: Sale
-        if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank() || link.isNullOrBlank()){
+        val thisSale: Sale
+        if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank() || link.isNullOrBlank()) {
             Toast.makeText(context, "You must fill all the fields", Toast.LENGTH_SHORT).show()
-            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, category = category, link = null)
+            thisSale = Sale(
+                name = "",
+                description = "",
+                originalPrice = 0,
+                salePrice = 0,
+                isOnline = isOnline,
+                createdAt = currentTime,
+                categoryId = category,
+                link = null
+            )
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
             val offerPrice = offerPriceInput.text.toString().toInt()
-            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, category = category, link = link)
+            thisSale = Sale(
+                name = name,
+                description = description,
+                originalPrice = normalPrice,
+                salePrice = offerPrice,
+                isOnline = isOnline,
+                createdAt = currentTime,
+                categoryId = category,
+                link = link
+            )
         }
         return thisSale
     }

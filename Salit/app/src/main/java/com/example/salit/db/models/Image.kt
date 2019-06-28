@@ -18,7 +18,7 @@ import android.support.annotation.NonNull
 
 data class Image(
     @NonNull @ColumnInfo(name = "uri") val uri: String?,
-    @NonNull @ColumnInfo(name = "saleId") val sale_id: Int
+    @NonNull @ColumnInfo(name = "saleId") val saleId: Int
 ){
     @PrimaryKey(autoGenerate=true) var id: Int = 0
 }
