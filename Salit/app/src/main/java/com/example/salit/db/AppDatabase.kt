@@ -45,11 +45,17 @@ abstract class AppDatabase : RoomDatabase() {
                         GlobalScope.launch(Dispatchers.IO) {
                             val database = getDatabase(context)
                             val categoryDao = database.CategoryDao()
+                            val saleDao = database.SaleDao()
+                            val userDao = database.UserDao()
                             categoryDao.insertAll(Category("All categories"))
                             categoryDao.insertAll(Category("Fashion"))
                             categoryDao.insertAll(Category("Technology"))
                             categoryDao.insertAll(Category("Sport"))
                             categoryDao.insertAll(Category("Others"))
+                            userDao.insertAll(User("user1@gmail.com"))
+                            userDao.insertAll(User("user2@gmail.com"))
+                            userDao.insertAll(User("user3@gmail.com"))
+
                         }
                     }
                 }).build()
