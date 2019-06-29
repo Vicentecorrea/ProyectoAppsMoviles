@@ -130,7 +130,9 @@ class CreateOnlineSaleFragment : Fragment() {
                 categoryId = category,
                 link = null,
                 userEmail = currentUserEmail,
-                photoUri = null
+                photoUri = null,
+                latitude = null,
+                longitude = null
             )
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
@@ -145,7 +147,9 @@ class CreateOnlineSaleFragment : Fragment() {
                 categoryId = category,
                 link = link,
                 userEmail = currentUserEmail,
-                photoUri = null
+                photoUri = null,
+                latitude = null,
+                longitude = null
             )
         }
         return thisSale

@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.example.salit.CredentialsManager
 import com.example.salit.R
+import com.example.salit.RequestCode
 import com.example.salit.db.AppDatabase
 import com.example.salit.db.models.User
 import com.example.salit.fragments.CreateOnlineSaleFragment
@@ -78,13 +79,13 @@ class MainActivity : AppCompatActivity() {
             transaction.remove(currentLoadedFragment!!).commit()
         }
 
-        startActivityForResult(Intent(this, LoginActivity::class.java), 1)
+        startActivityForResult(Intent(this, LoginActivity::class.java), RequestCode.GO_TO_LOGIN_FROM_MAIN_ACTIVITY)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            1 -> {
+            RequestCode.GO_TO_LOGIN_FROM_MAIN_ACTIVITY -> {
                 if (resultCode == Activity.RESULT_OK){
                     if (data != null){
                         storeUserCredentials(data.extras!!)

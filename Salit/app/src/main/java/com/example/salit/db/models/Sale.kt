@@ -35,6 +35,8 @@ data class Sale(
     @NonNull @ColumnInfo(name = "isOnline") val isOnline: Boolean,
     @NonNull @ColumnInfo(name = "createdAt") val createdAt: String,
     @NonNull @ColumnInfo(name = "userEmail") val userEmail: String,
+    @ColumnInfo(name = "latitude") val latitude: Double?,
+    @ColumnInfo(name = "longitude") val longitude: Double?,
     @ColumnInfo(name = "link") val link: String?,
     @ColumnInfo(name = "photoUri") val photoUri: String?
 ) {

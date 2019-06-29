@@ -1,16 +1,24 @@
 package com.example.salit.fragments
 
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
+import android.support.v4.content.PermissionChecker
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,10 +29,12 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.salit.CredentialsManager
 import com.example.salit.Constants
+import com.example.salit.RequestCode
 import com.example.salit.activities.MainActivity
 import com.example.salit.db.AppDatabase
 import com.example.salit.db.models.Category
 import com.example.salit.db.models.Sale
+import com.example.salit.location.CustomLocationListener
 import kotlinx.android.synthetic.main.fragment_create_online_sale.*
 import kotlinx.android.synthetic.main.fragment_create_sale.*
 import kotlinx.android.synthetic.main.fragment_create_sale.createSaleButton
@@ -46,6 +56,8 @@ class CreateSaleFragment : Fragment() {
 
     private var category = 1
     private var currentPhotoPath: String? = null
+    private lateinit var locationManager: LocationManager
+    private val customLocationListener = CustomLocationListener()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +72,7 @@ class CreateSaleFragment : Fragment() {
         setSpinnerCategories()
         addSpinnerCategoryListener()
         setTakePhotoButtonListener()
+        askForGPSAccess()
         createSaleButton.setOnClickListener {
             createSale()
         }
@@ -99,7 +112,7 @@ class CreateSaleFragment : Fragment() {
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, 2)
+                    startActivityForResult(takePictureIntent, RequestCode.REQUEST_TAKE_PHOTO)
                 }
             }
         }
@@ -143,7 +156,7 @@ class CreateSaleFragment : Fragment() {
             val categoryObjects = categoryDao.getAll()
             launch(Dispatchers.Main) {
 
-                for (category in categoryObjects){
+                for (category in categoryObjects) {
                     categories.add(category.name!!)
                 }
                 val spinnerArray = ArrayAdapter(context!!, android.R.layout.simple_spinner_dropdown_item, categories)
@@ -155,7 +168,7 @@ class CreateSaleFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == RequestCode.REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             setPic()
         }
     }
@@ -187,7 +200,7 @@ class CreateSaleFragment : Fragment() {
 
     private fun createSale() {
         val saleObject = createSaleObject()
-        if (saleObject.name != ""){
+        if (saleObject.name != "") {
             storeSaleObject(saleObject)
         }
     }
@@ -200,7 +213,7 @@ class CreateSaleFragment : Fragment() {
                 launch(Dispatchers.Main) {
                     (activity as MainActivity).goToHomeFragment()
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 launch(Dispatchers.Main) {
                     Toast.makeText(context, "Error creating sale ${e.message}", Toast.LENGTH_LONG).show()
                 }
@@ -216,15 +229,134 @@ class CreateSaleFragment : Fragment() {
         val currentUserEmail = CredentialsManager.getInstance(context!!).loadUser()!!.first
         val description = saleDescriptionEditText.text.toString()
         val thisSale: Sale
-        if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank()){
+        if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank()) {
             Toast.makeText(context, "You must fill all the fields", Toast.LENGTH_SHORT).show()
-            thisSale = Sale(name = "", description = "", originalPrice = 0, salePrice = 0, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null, photoUri = currentPhotoPath, userEmail = currentUserEmail)
+            thisSale = Sale(
+                name = "",
+                description = "",
+                originalPrice = 0,
+                salePrice = 0,
+                isOnline = isOnline,
+                createdAt = currentTime,
+                categoryId = category,
+                link = null,
+                photoUri = currentPhotoPath,
+                userEmail = currentUserEmail,
+                latitude = null,
+                longitude = null
+            )
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
             val offerPrice = offerPriceInput.text.toString().toInt()
-            thisSale = Sale(name = name, description = description, originalPrice = normalPrice, salePrice = offerPrice, isOnline = isOnline, createdAt = currentTime, categoryId = category, link = null, photoUri = currentPhotoPath, userEmail = currentUserEmail)
+            thisSale = Sale(
+                name = name,
+                description = description,
+                originalPrice = normalPrice,
+                salePrice = offerPrice,
+                isOnline = isOnline,
+                createdAt = currentTime,
+                categoryId = category,
+                link = null,
+                photoUri = currentPhotoPath,
+                userEmail = currentUserEmail,
+                latitude = customLocationListener.latitude,
+                longitude = customLocationListener.longitude
+            )
         }
         return thisSale
+    }
+
+    private fun askForGPSAccess() {
+        // ASK Permission
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            // Permission granted by default on previous versions
+        } else {
+            if (PermissionChecker.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(
+                    Array(2) { Manifest.permission.ACCESS_FINE_LOCATION },
+                    RequestCode.FINE_LOCATION_REQUEST
+                )
+            }
+        }
+    }
+
+    private fun startReadingGPSPosition() {
+        // CHECK Permissioncontext!!
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(
+                context!!,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            //Permission not enabled
+        } else {
+            locationManager = activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val location = getLastKnownLocation()
+            if (location != null) {
+                customLocationListener.latitude = location.latitude
+                customLocationListener.longitude = location.longitude
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10f, customLocationListener)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLastKnownLocation(): Location? {
+        val providers = locationManager.getProviders(true)
+        var bestLocation: Location? = null
+        providers.forEach { provider ->
+            val l = locationManager.getLastKnownLocation(provider)
+            if (l != null) {
+                if (bestLocation == null || l.accuracy < bestLocation!!.accuracy) {
+                    // Found best last known location: %s", l)
+                    bestLocation = l
+                }
+            }
+        }
+        return bestLocation
+    }
+
+    private fun stopReadingGPSPosition() {
+        try {
+            locationManager.removeUpdates(customLocationListener)
+        } catch (e: Exception) {
+            Log.d("INFO", "Exception ocurred while stop reading position -> ${e.message}")
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startReadingGPSPosition()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopReadingGPSPosition()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            RequestCode.FINE_LOCATION_REQUEST -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    startReadingGPSPosition()
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return
+            }
+
+            else -> {
+                // Ignore all other requests.
+            }
+        }
     }
 
 }
