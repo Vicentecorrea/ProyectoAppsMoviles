@@ -11,5 +11,8 @@
 /build
 /captures
 .externalNativeBuild
-app/src/main/res/values/api_key.xml
+*api_key.xml
+
+
+
 
