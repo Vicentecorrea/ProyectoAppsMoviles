@@ -95,7 +95,7 @@ class CreateSaleFragment : Fragment() {
                 photoFile?.also {
                     val photoURI: Uri = FileProvider.getUriForFile(
                         context!!,
-                        "com.example.android.fileprovider",
+                        "com.example.android.photoProvider",
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)

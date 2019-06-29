@@ -2,7 +2,9 @@ package com.example.salit.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.salit.CredentialsManager
 import com.example.salit.R
+import com.example.salit.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -24,7 +26,13 @@ class SaleDetailsActivity : AppCompatActivity() {
 
     private fun setViewContent() {
         GlobalScope.launch(Dispatchers.IO) {
-//            val current
+            val currentUserEmail = CredentialsManager.getInstance(baseContext).loadUser()!!.first
+            val appDatabase = AppDatabase.getDatabase(baseContext)
+            val saleDao = appDatabase.SaleDao()
+            val selectedSale = saleDao.getSaleById(currentSaleId)
+//            launch(Dispatchers.Main) {
+//
+//            }
         }
     }
 
