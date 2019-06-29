@@ -1,7 +1,8 @@
-package com.example.lab
+package com.example.salit
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.salit.SingletonHolder
 import com.example.salit.R
 
 class CredentialsManager private constructor(context: Context){

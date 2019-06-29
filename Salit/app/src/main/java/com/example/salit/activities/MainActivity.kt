@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import android.widget.Toast
-import com.example.lab.CredentialsManager
+import com.example.salit.CredentialsManager
 import com.example.salit.R
 import com.example.salit.db.AppDatabase
 import com.example.salit.db.models.User

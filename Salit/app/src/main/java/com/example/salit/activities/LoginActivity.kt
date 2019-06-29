@@ -4,7 +4,7 @@ import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.example.lab.EmailValidator
+import com.example.salit.EmailValidator
 import com.example.salit.R
 import kotlinx.android.synthetic.main.activity_login.*
 

@@ -1,4 +1,4 @@
-package com.example.lab
+package com.example.salit
 
 import java.util.regex.Pattern
 

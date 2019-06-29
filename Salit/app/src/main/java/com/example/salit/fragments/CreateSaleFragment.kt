@@ -19,7 +19,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.example.lab.CredentialsManager
+import com.example.salit.CredentialsManager
 import com.example.salit.Constants
 import com.example.salit.activities.MainActivity
 import com.example.salit.db.AppDatabase
