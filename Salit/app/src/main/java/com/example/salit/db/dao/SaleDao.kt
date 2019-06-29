@@ -19,14 +19,14 @@ interface SaleDao {
     @Query("SELECT * FROM sales ORDER BY salePrice DESC")
     fun getSalesOrderedByPriceAsc(): List<Sale>
 
-    @Query("SELECT * FROM sales WHERE categoryId LIKE :categoryName")
-    fun getSalesByCategory(categoryName: String): List<Sale>
+    @Query("SELECT * FROM sales WHERE categoryId LIKE :categoryId")
+    fun getSalesByCategory(categoryId: Int): List<Sale>
 
     @Query("SELECT * FROM sales WHERE name LIKE :saleName")
     fun getSalesByName(saleName: String): List<Sale>
 
-    @Query("SELECT * FROM sales WHERE name LIKE :saleName AND categoryId LIKE :categoryName")
-    fun getSalesByNameAndCategory(saleName: String, categoryName: String): List<Sale>
+    @Query("SELECT * FROM sales WHERE name LIKE :saleName AND categoryId LIKE :categoryId")
+    fun getSalesByNameAndCategory(saleName: String, categoryId: Int): List<Sale>
 
     @Query("SELECT * FROM sales WHERE salePrice < :targetPrice ORDER BY salePrice ASC")
     fun getSalesByPriceTarget(targetPrice: Int): List<Sale>
