@@ -248,20 +248,38 @@ class CreateSaleFragment : Fragment() {
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
             val offerPrice = offerPriceInput.text.toString().toInt()
-            thisSale = Sale(
-                name = name,
-                description = description,
-                originalPrice = normalPrice,
-                salePrice = offerPrice,
-                isOnline = isOnline,
-                createdAt = currentTime,
-                categoryId = category,
-                link = null,
-                photoUri = currentPhotoPath,
-                userEmail = currentUserEmail,
-                latitude = customLocationListener.latitude,
-                longitude = customLocationListener.longitude
-            )
+            if (offerPrice >= normalPrice) {
+                Toast.makeText(context, "The offer price must be lower than the original price", Toast.LENGTH_SHORT).show()
+                thisSale = Sale(
+                    name = "",
+                    description = "",
+                    originalPrice = 0,
+                    salePrice = 0,
+                    isOnline = isOnline,
+                    createdAt = currentTime,
+                    categoryId = category,
+                    link = null,
+                    photoUri = currentPhotoPath,
+                    userEmail = currentUserEmail,
+                    latitude = null,
+                    longitude = null
+                )
+            } else {
+                thisSale = Sale(
+                    name = name,
+                    description = description,
+                    originalPrice = normalPrice,
+                    salePrice = offerPrice,
+                    isOnline = isOnline,
+                    createdAt = currentTime,
+                    categoryId = category,
+                    link = null,
+                    photoUri = currentPhotoPath,
+                    userEmail = currentUserEmail,
+                    latitude = customLocationListener.latitude,
+                    longitude = customLocationListener.longitude
+                )
+            }
         }
         return thisSale
     }

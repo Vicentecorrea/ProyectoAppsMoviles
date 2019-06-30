@@ -18,5 +18,15 @@
                 android:id="@+id/searchSale"
                 android:icon="@drawable/ic_baseline_search_24px"
                 android:title="Search"/>
+
+        <item
+                android:id="@+id/deleteSale"
+                android:icon="@drawable/ic_baseline_delete_forever_24px"
+                android:title="Delete one of my sales"/>
+
+        <item
+                android:id="@+id/signOut"
+                android:icon="@drawable/ic_baseline_exit_to_app_24px"
+                android:title="Sign out"/>
     </group>
 </menu>

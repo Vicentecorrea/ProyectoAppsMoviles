@@ -32,6 +32,11 @@ interface SaleDao {
     fun getSalesByPriceTarget(targetPrice: Int): List<Sale>
 
     @Query("SELECT * FROM sales WHERE id LIKE :id")
-    fun getSaleById(id: Int): Sale?
-    
+    fun getSaleById(id: Int): Sale
+
+    @Query("SELECT * FROM sales WHERE userEmail LIKE :userEmail")
+    fun getUserSales(userEmail: String): List<Sale>
+
+    @Query("DELETE FROM sales WHERE id LIKE :id")
+    fun deleteSale(id: Int)
 }

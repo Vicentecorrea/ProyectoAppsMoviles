@@ -13,10 +13,7 @@ import com.example.salit.R
 import com.example.salit.RequestCode
 import com.example.salit.db.AppDatabase
 import com.example.salit.db.models.User
-import com.example.salit.fragments.CreateOnlineSaleFragment
-import com.example.salit.fragments.CreateSaleFragment
-import com.example.salit.fragments.HomeFragment
-import com.example.salit.fragments.SearchSaleFragment
+import com.example.salit.fragments.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -179,10 +176,29 @@ class MainActivity : AppCompatActivity() {
                     }
                     supportActionBar!!.title = "Search"
                 }
+
+                R.id.deleteSale -> {
+                    val deleteSaleFragment = supportFragmentManager.findFragmentByTag("deleteSaleFrag")
+                    if (deleteSaleFragment != null) {
+                        transaction.replace(R.id.contentFrameLayout, deleteSaleFragment)
+                    } else {
+                        transaction.replace(R.id.contentFrameLayout, DeleteSaleFragment(), "deleteSaleFrag")
+                    }
+                    supportActionBar!!.title = "My sales"
+                }
+
+                R.id.signOut -> {
+                    onSignOut()
+                }
             }
 
             transaction.commit()
             true
         }
+    }
+
+    private fun onSignOut() {
+        CredentialsManager.getInstance(baseContext).deleteUser()
+        goToLoginActivity()
     }
 }

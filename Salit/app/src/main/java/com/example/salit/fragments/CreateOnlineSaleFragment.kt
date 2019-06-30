@@ -137,20 +137,38 @@ class CreateOnlineSaleFragment : Fragment() {
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
             val offerPrice = offerPriceInput.text.toString().toInt()
-            thisSale = Sale(
-                name = name,
-                description = description,
-                originalPrice = normalPrice,
-                salePrice = offerPrice,
-                isOnline = isOnline,
-                createdAt = currentTime,
-                categoryId = category,
-                link = link,
-                userEmail = currentUserEmail,
-                photoUri = null,
-                latitude = null,
-                longitude = null
-            )
+            if (offerPrice >= normalPrice){
+                Toast.makeText(context, "The offer price must be lower than the original price", Toast.LENGTH_SHORT).show()
+                thisSale = Sale(
+                    name = "",
+                    description = "",
+                    originalPrice = 0,
+                    salePrice = 0,
+                    isOnline = isOnline,
+                    createdAt = currentTime,
+                    categoryId = category,
+                    link = null,
+                    userEmail = currentUserEmail,
+                    photoUri = null,
+                    latitude = null,
+                    longitude = null
+                )
+            } else {
+                thisSale = Sale(
+                    name = name,
+                    description = description,
+                    originalPrice = normalPrice,
+                    salePrice = offerPrice,
+                    isOnline = isOnline,
+                    createdAt = currentTime,
+                    categoryId = category,
+                    link = link,
+                    userEmail = currentUserEmail,
+                    photoUri = null,
+                    latitude = null,
+                    longitude = null
+                )
+            }
         }
         return thisSale
     }
