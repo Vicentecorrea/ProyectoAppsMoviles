@@ -35,6 +35,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         setSaleMarker()
     }
 
+
     private fun setSaleMarker() {
         val appDatabase = AppDatabase.getDatabase(baseContext)
         val saleDao = appDatabase.SaleDao()
