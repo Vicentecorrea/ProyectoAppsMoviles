@@ -8,5 +8,6 @@ import android.support.annotation.NonNull
 
 @Entity(tableName = "users")
 data class User (
-    @PrimaryKey @ColumnInfo(name = "email") val email: String
+    @PrimaryKey @ColumnInfo(name = "email") val email: String,
+    @NonNull @ColumnInfo(name = "password") val password: String
 )

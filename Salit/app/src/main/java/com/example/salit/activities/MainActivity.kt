@@ -29,13 +29,6 @@ class MainActivity : AppCompatActivity() {
         loadUserDataOrSendToLoginActivity()
     }
 
-    private fun startHomeView() {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val fragment = HomeFragment()
-        fragmentTransaction.add(R.id.contentFrameLayout, fragment)
-        fragmentTransaction.commit()
-    }
-
     private fun loadUserDataOrSendToLoginActivity(){
         val userData = loadUserData()
         if (userData != null) {
@@ -100,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             val user : User? = AppDatabase.getDatabase(baseContext).UserDao().getUser(userEmail)
             if (user == null){
-                AppDatabase.getDatabase(baseContext).UserDao().insertAll(User(userEmail))
+                AppDatabase.getDatabase(baseContext).UserDao().insertAll(User(userEmail, userPassword))
             }
         }
 

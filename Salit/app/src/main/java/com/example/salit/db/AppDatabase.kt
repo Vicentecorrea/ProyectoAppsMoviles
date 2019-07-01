@@ -14,17 +14,19 @@ import com.example.salit.db.dao.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 @Database(
     entities = [Image::class, Location::class, Sale::class, Category::class, User::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun SaleDao(): SaleDao
     abstract fun CategoryDao(): CategoryDao
     abstract fun UserDao(): UserDao
+
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
@@ -52,10 +54,73 @@ abstract class AppDatabase : RoomDatabase() {
                             categoryDao.insertAll(Category("Technology"))
                             categoryDao.insertAll(Category("Sport"))
                             categoryDao.insertAll(Category("Others"))
-                            userDao.insertAll(User("user1@gmail.com"))
-                            userDao.insertAll(User("user2@gmail.com"))
-                            userDao.insertAll(User("user3@gmail.com"))
-
+                            userDao.insertAll(User("user1@gmail.com", "123123"))
+                            userDao.insertAll(User("user2@gmail.com", "123123"))
+                            userDao.insertAll(User("user3@gmail.com", "123123"))
+                            saleDao.insertAll(
+                                Sale(
+                                    name = "sportPhysicalSale",
+                                    categoryId = 4,
+                                    description = "This is a sport sale",
+                                    originalPrice = 15000,
+                                    salePrice = 7000,
+                                    isOnline = false,
+                                    createdAt = Calendar.getInstance().time.toString(),
+                                    userEmail = "user1@gmail.com",
+                                    link = null,
+                                    photoUri = null,
+                                    latitude = null,
+                                    longitude = null
+                                )
+                            )
+                            saleDao.insertAll(
+                                Sale(
+                                    name = "fashionPhysicalSale",
+                                    categoryId = 4,
+                                    description = "This is a fashion sale",
+                                    originalPrice = 30000,
+                                    salePrice = 13000,
+                                    isOnline = false,
+                                    createdAt = Calendar.getInstance().time.toString(),
+                                    userEmail = "user2@gmail.com",
+                                    link = null,
+                                    photoUri = null,
+                                    latitude = null,
+                                    longitude = null
+                                )
+                            )
+                            saleDao.insertAll(
+                                Sale(
+                                    name = "technologyPhysicalSale",
+                                    categoryId = 4,
+                                    description = "This is a technology sale",
+                                    originalPrice = 250000,
+                                    salePrice = 13000,
+                                    isOnline = false,
+                                    createdAt = Calendar.getInstance().time.toString(),
+                                    userEmail = "user2@gmail.com",
+                                    link = null,
+                                    photoUri = null,
+                                    latitude = null,
+                                    longitude = null
+                                )
+                            )
+                            saleDao.insertAll(
+                                Sale(
+                                    name = "SAMSUNG GALAXY A70 NEGRO 6,7",
+                                    categoryId = 4,
+                                    description = "This is a technology sale",
+                                    originalPrice = 329990,
+                                    salePrice = 299990,
+                                    isOnline = true,
+                                    createdAt = Calendar.getInstance().time.toString(),
+                                    userEmail = "user2@gmail.com",
+                                    link = "https://simple.ripley.cl/samsung-galaxy-a70-negro-67-2000374031011p?utm_source=soicos",
+                                    photoUri = null,
+                                    latitude = null,
+                                    longitude = null
+                                )
+                            )
                         }
                     }
                 }).build()
