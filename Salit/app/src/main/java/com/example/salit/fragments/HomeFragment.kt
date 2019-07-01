@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
@@ -40,6 +42,21 @@ class HomeFragment : Fragment() {
         val saleDao = database.SaleDao()
         GlobalScope.launch(Dispatchers.IO){
             val sales = saleDao.getAll()
+            val today = Calendar.getInstance().time
+
+
+
+
+//            for (sale in sales){
+//                val sdf = SimpleDateFormat("dd-MM-yyyy")
+//                val date = sdf.parse(sale.createdAt)
+//                val cal = Calendar.getInstance()
+//                cal.time = date
+//                val month = Month.from(date)
+//
+//            }
+
+//            val filteredSales = sales.filter { Calendar.getInstance().time = it.createdAt > today }
             launch(Dispatchers.Main){
                 val itemsAdapter = SalesAdapter(context!!, ArrayList(sales))
                 salesListView.adapter = itemsAdapter

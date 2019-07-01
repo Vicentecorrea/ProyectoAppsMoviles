@@ -1,6 +1,8 @@
 package com.example.salit.fragments
 
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_create_sale.*
 import kotlinx.android.synthetic.main.fragment_create_online_sale.createSaleButton
 import kotlinx.android.synthetic.main.fragment_create_online_sale.normalPriceInput
 import kotlinx.android.synthetic.main.fragment_create_online_sale.offerPriceInput
-import kotlinx.android.synthetic.main.fragment_create_online_sale.saleDescriptionEditText
+//import kotlinx.android.synthetic.main.fragment_create_online_sale.saleDescriptionEditText
 import kotlinx.android.synthetic.main.fragment_create_online_sale.saleNameEditText
 import kotlinx.android.synthetic.main.fragment_create_online_sale.spinnerCategories
 import kotlinx.android.synthetic.main.fragment_create_online_sale.linkEditText
@@ -28,6 +30,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 class CreateOnlineSaleFragment : Fragment() {
@@ -114,11 +118,10 @@ class CreateOnlineSaleFragment : Fragment() {
         val isOnline = true
         val currentTime = Calendar.getInstance().time.toString()
         val name = saleNameEditText.text.toString()
-        val description = saleDescriptionEditText.text.toString()
         val currentUserEmail = CredentialsManager.getInstance(context!!).loadUser()!!.first
         val link = linkEditText.text.toString()
         val thisSale: Sale
-        if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank() || link.isNullOrBlank()) {
+        if (name.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank() || link.isNullOrBlank()) {
             Toast.makeText(context, "You must fill all the fields", Toast.LENGTH_SHORT).show()
             thisSale = Sale(
                 name = "",
@@ -156,7 +159,7 @@ class CreateOnlineSaleFragment : Fragment() {
             } else {
                 thisSale = Sale(
                     name = name,
-                    description = description,
+                    description = "",
                     originalPrice = normalPrice,
                     salePrice = offerPrice,
                     isOnline = isOnline,

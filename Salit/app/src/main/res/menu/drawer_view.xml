@@ -22,7 +22,7 @@
         <item
                 android:id="@+id/deleteSale"
                 android:icon="@drawable/ic_baseline_delete_forever_24px"
-                android:title="Delete one of my sales"/>
+                android:title="Delete sales"/>
 
         <item
                 android:id="@+id/signOut"

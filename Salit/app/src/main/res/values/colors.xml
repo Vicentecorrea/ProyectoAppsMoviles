@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorInput">#DAE5FF</color>
+    <color name="colorLink">#011AFE</color>
+    <color name="colorPriceDiscount">#01B90D</color>
+    <color name="colorMapIcon">#FE0101</color>
 </resources>
