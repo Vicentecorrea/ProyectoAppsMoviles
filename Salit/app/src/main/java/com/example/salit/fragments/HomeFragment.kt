@@ -18,8 +18,15 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
+
+
+
+
+
 
 class HomeFragment : Fragment() {
 
@@ -43,22 +50,24 @@ class HomeFragment : Fragment() {
         GlobalScope.launch(Dispatchers.IO){
             val sales = saleDao.getAll()
             val today = Calendar.getInstance().time
-
-
-
-
-//            for (sale in sales){
-//                val sdf = SimpleDateFormat("dd-MM-yyyy")
-//                val date = sdf.parse(sale.createdAt)
-//                val cal = Calendar.getInstance()
-//                cal.time = date
-//                val month = Month.from(date)
-//
-//            }
+            val salesToDelete = arrayListOf<Sale>()
+            for (sale in sales){
+                val cal = Calendar.getInstance()
+                val sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+                cal.time = sdf.parse(sale.createdAt) // all done
+                cal.add(Calendar.MONTH, 1)
+                if (today > cal.time){
+                        salesToDelete.add(sale)
+                }
+            }
+            for (sale in salesToDelete){
+                saleDao.deleteSale(sale.id)
+            }
+            val finalSales = saleDao.getAll()
 
 //            val filteredSales = sales.filter { Calendar.getInstance().time = it.createdAt > today }
             launch(Dispatchers.Main){
-                val itemsAdapter = SalesAdapter(context!!, ArrayList(sales))
+                val itemsAdapter = SalesAdapter(context!!, ArrayList(finalSales))
                 salesListView.adapter = itemsAdapter
             }
         }
