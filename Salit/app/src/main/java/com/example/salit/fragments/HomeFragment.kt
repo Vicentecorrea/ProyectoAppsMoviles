@@ -40,6 +40,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadDatabaseFirstTime()
         loadSales()
         setListOnClickListener()
     }
@@ -71,6 +72,10 @@ class HomeFragment : Fragment() {
                 salesListView.adapter = itemsAdapter
             }
         }
+    }
+
+    private fun loadDatabaseFirstTime(){
+        val database = AppDatabase.getDatabase(context!!)
     }
 
     private fun setListOnClickListener() {

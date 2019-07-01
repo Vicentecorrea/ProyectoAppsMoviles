@@ -30,6 +30,16 @@
             android:background="#0000"/>
 
     <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/saleDateTextView"
+            app:layout_constraintTop_toTopOf="@id/locationOnImageButton"
+            app:layout_constraintEnd_toStartOf="@id/locationOnImageButton"
+
+
+    />
+
+    <TextView
             android:id="@+id/saleDescriptionTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -50,6 +60,7 @@
             android:layout_marginTop="10dp"
             android:text="Category:"
             />
+
 
     <TextView
             android:id="@+id/categoryTextView"

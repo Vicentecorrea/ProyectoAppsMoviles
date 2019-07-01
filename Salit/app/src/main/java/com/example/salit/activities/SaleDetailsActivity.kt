@@ -54,6 +54,7 @@ class SaleDetailsActivity : AppCompatActivity() {
                 originalPriceTextView.text = selectedSale.originalPrice.toString()
                 offerPriceTextView.text = selectedSale.salePrice.toString()
                 categoryTextView.text = selectedSaleCategoryName
+                saleDateTextView.text = selectedSale.createdAt
                 discountOnPriceTextView.text = ((100 - ((selectedSale.salePrice*100)/selectedSale.originalPrice))*-1).toString() + "%"
                 imagePlaceholder.post {
                     if (!selectedSale.photoUri.isNullOrBlank())
