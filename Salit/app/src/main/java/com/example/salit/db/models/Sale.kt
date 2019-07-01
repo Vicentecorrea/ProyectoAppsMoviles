@@ -6,6 +6,7 @@ import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.ForeignKey.CASCADE
 import android.arch.persistence.room.PrimaryKey
 import android.support.annotation.NonNull
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity(

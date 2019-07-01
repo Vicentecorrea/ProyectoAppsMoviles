@@ -229,8 +229,9 @@ class CreateSaleFragment : Fragment() {
         val currentUserEmail = CredentialsManager.getInstance(context!!).loadUser()!!.first
         val description = saleDescriptionEditText.text.toString()
         val thisSale: Sale
-        if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank()) {
-            Toast.makeText(context, "You must fill all the fields", Toast.LENGTH_SHORT).show()
+        val c = currentPhotoPath
+        if (name.isBlank() || description.isBlank() || normalPriceInput.text.toString().isBlank() || offerPriceInput.text.toString().isBlank() || currentPhotoPath.isNullOrEmpty()) {
+            Toast.makeText(context, "You must fill all the fields and attach an image", Toast.LENGTH_SHORT).show()
             thisSale = Sale(
                 name = "",
                 description = "",

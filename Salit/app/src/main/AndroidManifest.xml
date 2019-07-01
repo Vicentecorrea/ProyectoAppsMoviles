@@ -17,9 +17,11 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activities.MapActivity">
+        <activity android:name=".activities.MapActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activities.SaleDetailsActivity">
+        <activity android:name=".activities.SaleDetailsActivity"
+                  android:screenOrientation="portrait">
         </activity>
 
         <provider
@@ -32,7 +34,8 @@
                     android:resource="@xml/file_paths"/>
         </provider>
 
-        <activity android:name=".activities.LoginActivity">
+        <activity android:name=".activities.LoginActivity"
+                  android:screenOrientation="portrait">
         </activity>
 
         <meta-data
@@ -42,9 +45,11 @@
         <activity
                 android:name=".activities.WebViewActivity"
                 android:label="@string/title_activity_web_view"
-                android:theme="@style/NoActionBar">
+                android:theme="@style/NoActionBar"
+                android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

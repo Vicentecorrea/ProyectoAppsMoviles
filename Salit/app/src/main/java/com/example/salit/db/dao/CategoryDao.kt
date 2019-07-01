@@ -16,4 +16,7 @@ interface CategoryDao {
     @Query("SELECT id FROM category WHERE name LIKE :categoryName")
     fun getCategoryId(categoryName: String): Int
 
+    @Query("SELECT name FROM category WHERE id LIKE :id")
+    fun getCategoryName(id: Int): String
+
 }

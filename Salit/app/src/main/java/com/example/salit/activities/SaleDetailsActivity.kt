@@ -1,7 +1,9 @@
 package com.example.salit.activities
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -43,19 +45,26 @@ class SaleDetailsActivity : AppCompatActivity() {
 //            val currentUserEmail = CredentialsManager.getInstance(baseContext).loadUser()!!.first
             val appDatabase = AppDatabase.getDatabase(baseContext)
             val saleDao = appDatabase.SaleDao()
+            val categoryDao = appDatabase.CategoryDao()
             val selectedSale = saleDao.getSaleById(currentSaleId)
+            val selectedSaleCategoryName = categoryDao.getCategoryName(selectedSale.categoryId)
             launch(Dispatchers.Main) {
                 saleNameTextView.text = selectedSale.name
                 saleDescriptionTextView.text = selectedSale.description
                 originalPriceTextView.text = selectedSale.originalPrice.toString()
                 offerPriceTextView.text = selectedSale.salePrice.toString()
+                categoryTextView.text = selectedSaleCategoryName
                 discountOnPriceTextView.text = ((100 - ((selectedSale.salePrice*100)/selectedSale.originalPrice))*-1).toString() + "%"
                 imagePlaceholder.post {
                     if (!selectedSale.photoUri.isNullOrBlank())
-                        setPic(selectedSale.photoUri!!)
+                        setPic(selectedSale.photoUri)
                 }
             }
         }
+    }
+
+    private fun getCurrentSaleValues() {
+        currentSaleId = intent.getIntExtra("SALE_ID", 0)
     }
 
     private fun setPic(imagePath: String) {
@@ -82,12 +91,36 @@ class SaleDetailsActivity : AppCompatActivity() {
 //        if (bmOptions.outWidth == 0 && bmOptions.outHeight == 0) imageDeletedTextView.visibility = View.VISIBLE
 
         BitmapFactory.decodeFile(imagePath, bmOptions)?.also { bitmap ->
-            imagePlaceholder.setImageBitmap(bitmap)
+            val rotatedBitmap = bitmap.rotate(90)
+            imagePlaceholder.setImageBitmap(rotatedBitmap)
             imagePlaceholder.alpha = 1f
         }
     }
 
-    private fun getCurrentSaleValues() {
-        currentSaleId = intent.getIntExtra("SALE_ID", 0)
+    fun Bitmap.rotate(degree:Int):Bitmap {
+        // Initialize a new matrix
+        val matrix = Matrix()
+
+        // Rotate the bitmap
+        matrix.postRotate(degree.toFloat())
+
+        // Resize the bitmap
+        val scaledBitmap = Bitmap.createScaledBitmap(
+            this,
+            width,
+            height,
+            true
+        )
+
+        // Create and return the rotated bitmap
+        return Bitmap.createBitmap(
+            scaledBitmap,
+            0,
+            0,
+            scaledBitmap.width,
+            scaledBitmap.height,
+            matrix,
+            true
+        )
     }
 }
