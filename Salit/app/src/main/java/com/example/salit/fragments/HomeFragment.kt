@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.example.salit.CredentialsManager
 import com.example.salit.R
 import com.example.salit.activities.SaleDetailsActivity
 import com.example.salit.activities.WebViewActivity
@@ -40,6 +41,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loggedUserTextView.text = CredentialsManager.getInstance(context!!).loadUser()!!.first
         loadDatabaseFirstTime()
         loadSales()
         setListOnClickListener()

@@ -7,4 +7,5 @@
     <color name="colorLink">#011AFE</color>
     <color name="colorPriceDiscount">#01B90D</color>
     <color name="colorMapIcon">#FE0101</color>
+    <color name="colorList">#FFFFFF</color>
 </resources>

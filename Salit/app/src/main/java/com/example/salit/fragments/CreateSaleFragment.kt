@@ -249,8 +249,12 @@ class CreateSaleFragment : Fragment() {
         } else {
             val normalPrice = normalPriceInput.text.toString().toInt()
             val offerPrice = offerPriceInput.text.toString().toInt()
-            if (offerPrice >= normalPrice) {
-                Toast.makeText(context, "The offer price must be lower than the original price", Toast.LENGTH_SHORT).show()
+            if (offerPrice >= normalPrice || offerPrice < 0 || normalPrice < 0) {
+                if (offerPrice < 0 || normalPrice < 0){
+                    Toast.makeText(context, "Both prices should be positive", Toast.LENGTH_SHORT).show()
+                } else if (offerPrice >= normalPrice) {
+                    Toast.makeText(context, "The offer price must be lower than the original price", Toast.LENGTH_SHORT).show()
+                }
                 thisSale = Sale(
                     name = "",
                     description = "",

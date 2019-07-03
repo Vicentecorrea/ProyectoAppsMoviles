@@ -76,7 +76,7 @@ abstract class AppDatabase : RoomDatabase() {
                             saleDao.insertAll(
                                 Sale(
                                     name = "fashionPhysicalSale",
-                                    categoryId = 4,
+                                    categoryId = 2,
                                     description = "This is a fashion sale",
                                     originalPrice = 30000,
                                     salePrice = 13000,
@@ -92,7 +92,7 @@ abstract class AppDatabase : RoomDatabase() {
                             saleDao.insertAll(
                                 Sale(
                                     name = "technologyPhysicalSale",
-                                    categoryId = 4,
+                                    categoryId = 3,
                                     description = "This is a technology sale",
                                     originalPrice = 250000,
                                     salePrice = 13000,
@@ -108,7 +108,7 @@ abstract class AppDatabase : RoomDatabase() {
                             saleDao.insertAll(
                                 Sale(
                                     name = "SAMSUNG GALAXY A70 NEGRO 6,7",
-                                    categoryId = 4,
+                                    categoryId = 3,
                                     description = "This is a technology sale",
                                     originalPrice = 329990,
                                     salePrice = 299990,
